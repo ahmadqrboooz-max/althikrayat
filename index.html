@@ -4,43 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نبض الذكريات | Nabad Althikrayat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: #0b0f19;
+            background: #05070f;
             color: #ffffff;
-            font-family: Tahoma, sans-serif;
-            text-align: center;
-            padding: 50px 20px;
-            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        h1 {
+        .stars-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            z-index: -1;
+        }
+        .container { width: 100%; max-width: 480px; text-align: center; }
+        .stage { display: none; opacity: 0; transition: opacity 0.6s ease; }
+        .stage.active { display: block; opacity: 1; }
+        h1.title {
+            font-family: 'Amiri', serif;
+            font-size: 2.2rem;
             color: #f39c12;
-            font-size: 28px;
+            text-shadow: 0 0 15px rgba(243, 156, 18, 0.4);
+            margin-bottom: 15px;
         }
-        p {
+        p.description {
+            font-size: 1.1rem;
             color: #d1d5db;
-            font-size: 16px;
-            line-height: 1.6;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            font-weight: 300;
         }
-        .btn {
+        .btn-gold {
             display: inline-block;
-            margin-top: 30px;
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #f39c12, #e67e22);
+            padding: 14px 35px;
+            background: linear-gradient(135deg, #f39c12, #d35400);
             color: #fff;
-            text-decoration: none;
-            border-radius: 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
             font-weight: bold;
-            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(243, 156, 18, 0.4);
+            margin-top: 15px;
         }
+        .card-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(243, 156, 18, 0.2);
+            padding: 25px 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            margin-bottom: 20px;
+        }
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .timer-item {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(243, 156, 18, 0.3);
+            border-radius: 10px;
+            padding: 10px 2px;
+        }
+        .timer-number { font-size: 1.3rem; font-weight: bold; color: #f39c12; display: block; }
+        .timer-label { font-size: 0.75rem; color: #9ca3af; }
+        
+        /* النجوم الخمس */
+        .stars-container { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        .star-btn {
+            background: none; border: none; font-size: 2rem; cursor: pointer;
+            filter: drop-shadow(0 0 5px rgba(243, 156, 18, 0.5));
+            transition: transform 0.2s;
+        }
+        .star-btn:active { transform: scale(1.2); }
+        
+        /* الشريط المنزلق */
+        .slider-box { margin: 20px 0; }
+        input[type=range] { width: 100%; accent-color: #f39c12; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <h1>نبض الذكريات</h1>
-    <p>تجربة سينمائية فريدة تُخلّد أجمل لحظاتكم...</p>
-    
-    <a href="#" class="btn">ابدئي رحلتك</a>
+    <div class="stars-bg"></div>
 
-</body>
-</html>
+    <div class="container">
+        
+        <!-- المرحلة 1: الدخول السينمائي -->
+        <div id="stage1" class="stage active">
+            <h1 class="title">نبض الذكريات</h1>
+            <p class="description">هناك حكايات صُنعت لتُعاش بكل المشاعر...</p>
+            <button class="btn-gold" onclick="nextStage(2)">ابدئي رحلتك ✨</button>
+        </div>
+
+        <!-- المرحلة 2: بداية الحكاية -->
+        <div id="stage2" class="stage">
+            <div class="card-box">
+                <h1 class="title" style="font-size: 1.6rem;">بداية الحكاية</h1>
+                <p class="description" style="margin-bottom: 0;">
+                    «بعض اللحظات لا تُقاس بالوقت، بل بالأثر الذي تتركه في الروح... واليوم نبدأ حكايتنا معاً».
+                </p>
+            </div>
+            <button class="btn-gold" onclick="nextStage(3)">تابعي الرحلة 🤍</button>
+        </div>
+
+        <!-- المرحلة 3: العداد الحي -->
+        <div id="stage3" class="stage">
+            <h1 class="title">نبض حكايتنا</h1>
+            <p
+                
