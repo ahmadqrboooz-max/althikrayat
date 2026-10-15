@@ -4,332 +4,190 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>نبض الذكريات | Nabad Althikrayat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@500;700&family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Reem+Kufi:wght@500;700&family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        
         body {
-            background: #020208;
-            color: #ffffff;
-            font-family: 'Tajawal', sans-serif;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+            background: #05070f; color: #fff; font-family: 'Tajawal', sans-serif;
+            overflow-x: hidden; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 15px;
         }
 
-        /* خلفية الفضاء والكواكب المتحركة بالـ Canvas */
-        #spaceCanvas {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            transition: filter 1.5s ease;
-        }
+        /* خلفية الفضاء الديناميكية */
+        #starsCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 
-        .container {
-            width: 90%;
-            max-width: 440px;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-            transform: scale(1);
-            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
-        }
+        .container { width: 100%; max-width: 440px; text-align: center; position: relative; z-index: 10; }
 
-        /* تأثير الزوم والتحول السينمائي الكوكبي */
-        .container.zoom-effect {
-            transform: scale(1.25);
-            opacity: 0;
-        }
-
-        /* المراحل */
         .stage {
-            display: none;
-            opacity: 0;
-            transform: translateY(30px);
+            display: none; opacity: 0; transform: translateY(20px);
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .stage.active { display: block; opacity: 1; transform: translateY(0); }
 
-        .stage.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
+        h1.title {
+            font-family: 'Reem Kufi', sans-serif; font-size: 2.2rem;
+            background: linear-gradient(135deg, #fff, #ffeaa7, #f39c12);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(243, 156, 18, 0.5); margin-bottom: 12px;
         }
-
-        /* العناوين والبطاقات الزجاجية الفاخرة */
-        h1.title-cinematic {
-            font-family: 'Reem Kufi', sans-serif;
-            font-size: 2.4rem;
-            background: linear-gradient(135deg, #fff 0%, #ffeaa7 50%, #f39c12 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(243, 156, 18, 0.5);
-            margin-bottom: 12px;
-        }
-
-        p.subtitle-cinematic {
-            font-family: 'Amiri', serif;
-            font-size: 1.2rem;
-            color: #e2e8f0;
-            line-height: 1.9;
-            margin-bottom: 25px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-        }
-
-        .planet-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            background: rgba(243, 156, 18, 0.15);
-            border: 1px solid rgba(243, 156, 18, 0.4);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #f39c12;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-        }
+        p.desc { font-family: 'Amiri', serif; font-size: 1.2rem; color: #e2e8f0; line-height: 1.8; margin-bottom: 25px; }
 
         .glass-card {
-            background: rgba(10, 14, 26, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(243, 156, 18, 0.3);
-            border-radius: 24px;
-            padding: 25px 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(243, 156, 18, 0.1);
-            margin-bottom: 20px;
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(243, 156, 18, 0.3); border-radius: 20px; padding: 25px 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); margin-bottom: 20px; position: relative;
         }
 
-        /* الأزرار الذهبية النابضة */
-        .btn-pulse {
-            width: 100%;
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);
-            color: #ffffff;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.15rem;
-            font-weight: 700;
-            font-family: 'Tajawal', sans-serif;
-            cursor: pointer;
-            box-shadow: 0 0 25px rgba(243, 156, 18, 0.5);
-            animation: pulseGlow 2s infinite alternate;
-            transition: transform 0.2s ease;
+        .btn-gold {
+            width: 85%; padding: 15px 25px; background: linear-gradient(135deg, #f39c12, #d35400);
+            color: #fff; border: none; border-radius: 40px; font-size: 1.1rem; font-weight: 700;
+            cursor: pointer; box-shadow: 0 0 20px rgba(243, 156, 18, 0.4); animation: pulse 2s infinite alternate;
         }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.03); box-shadow: 0 0 30px rgba(243, 156, 18, 0.8); } }
 
-        .btn-pulse:active { transform: scale(0.95); }
+        /* المشهد 2: العداد الحي */
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .timer-box { background: rgba(5, 7, 15, 0.8); border: 1px solid rgba(243, 156, 18, 0.4); border-radius: 12px; padding: 10px 2px; }
+        .timer-num { font-size: 1.4rem; font-weight: bold; color: #f1c40f; display: block; }
+        .timer-lbl { font-size: 0.75rem; color: #a0aec0; }
 
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 15px rgba(243, 156, 18, 0.4); }
-            100% { box-shadow: 0 0 35px rgba(243, 156, 18, 0.9); }
-        }
-
-        /* العداد الحي */
-        .timer-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
-        .timer-box {
-            background: rgba(5, 7, 15, 0.85);
-            border: 1px solid rgba(243, 156, 18, 0.4);
-            border-radius: 14px;
-            padding: 10px 2px;
-        }
-        .timer-val { font-size: 1.5rem; font-weight: bold; color: #f1c40f; display: block; }
-        .timer-lbl { font-size: 0.75rem; color: #a0aec0; margin-top: 3px; }
-
-        /* النجوم والرسائل */
+        /* المشهد 3: النجوم الخمس */
         .stars-row { display: flex; justify-content: center; gap: 10px; margin: 15px 0; }
-        .star-icon { font-size: 2rem; cursor: pointer; filter: drop-shadow(0 0 10px rgba(243, 156, 18, 0.8)); transition: transform 0.3s; }
-        .star-icon:active { transform: scale(1.3) rotate(15deg); }
+        .star-btn { font-size: 2.2rem; cursor: pointer; filter: drop-shadow(0 0 8px #f39c12); transition: transform 0.3s; }
+        .star-btn:active { transform: scale(1.3) rotate(20deg); }
 
-        input[type=range] { width: 100%; height: 8px; border-radius: 5px; background: rgba(255,255,255,0.2); accent-color: #f39c12; outline: none; }
+        /* المشهد 4: ألبوم الصور */
+        .album-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 15px; border: 1px solid rgba(243, 156, 18, 0.4); margin-bottom: 10px; }
+
+        /* المشهد 5: الظرف التفاعلي */
+        .envelope {
+            width: 120px; height: 80px; background: #d35400; margin: 0 auto 15px auto; border-radius: 8px;
+            position: relative; cursor: pointer; box-shadow: 0 0 20px rgba(211, 84, 0, 0.6); display: flex;
+            align-items: center; justify-content: center; font-size: 1.8rem; transition: transform 0.4s;
+        }
+        .envelope:active { transform: scale(1.1) rotate(-5deg); }
+
+        /* المشهد 6: صندوق الهدية النهائي */
+        .gift-box { font-size: 4rem; cursor: pointer; animation: bounce 1.5s infinite; margin-bottom: 15px; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
 <body>
 
-    <canvas id="spaceCanvas"></canvas>
+    <canvas id="starsCanvas"></canvas>
 
-    <div class="container" id="mainContainer">
+    <div class="container">
         
-        <!-- المرحلة 1: كوكب البداية (سماء النجوم الفضية والذهبية) -->
+        <!-- المشهد الأول: الدخول إلى عالم الذكريات -->
         <div id="stage1" class="stage active">
-            <span class="planet-badge">🌟 محطة البداية: كوكب النبض</span>
-            <h1 class="title-cinematic">نبض الذكريات</h1>
-            <p class="subtitle-cinematic">هناك حكايات وُلدت بين النجوم لتُعاش بكل جوارح الروح...</p>
-            <button class="btn-pulse" onclick="travelToPlanet(2, 'gold')">انتقال إلى كوكب الحكاية 🚀</button>
+            <h1 class="title">عالم الذكريات</h1>
+            <p class="desc">هناك حكايات صُنعت من نور النجوم... لتُعاش بكل جوارح المشاعر ✨</p>
+            <button class="btn-gold" onclick="nextStage(2, 'purple')">ابدئي الرحلة ✨</button>
         </div>
 
-        <!-- المرحلة 2: كوكب البداية الدافئة (عالم الغروب والبريق الدافئ) -->
+        <!-- المشهد الثاني: حكاية الوقت (العداد الحي) -->
         <div id="stage2" class="stage">
-            <span class="planet-badge">🌅 كوكب الحكاية العميقة</span>
-            <div class="glass-card">
-                <h1 class="title-cinematic" style="font-size: 1.8rem;">بداية الحكاية</h1>
-                <p class="subtitle-cinematic" style="margin-bottom: 0;">
-                    «بعض اللحظات تشبه شروقاً لا ينتهي... غيّرت كل تفاصيل أيامي وجعلت للوقت طعماً آخر معكِ».
-                </p>
-            </div>
-            <button class="btn-pulse" onclick="travelToPlanet(3, 'blue')">السفر إلى كوكب الزمن 🌌</button>
-        </div>
-
-        <!-- المرحلة 3: كوكب الزمكان والعداد الحي (عالم مجرة السديم الأزرق) -->
-        <div id="stage3" class="stage">
-            <span class="planet-badge">⏳ كوكب نبض الزمان</span>
-            <h1 class="title-cinematic" style="font-size: 1.8rem;">ساعة اللقاء</h1>
-            <p class="subtitle-cinematic" style="font-size: 1rem; margin-bottom: 10px;">المدة التي قضيناها في الدوران فلكاً واحداً:</p>
-            
+            <h1 class="title">حكاية الوقت</h1>
+            <p class="desc" style="font-size: 1rem; margin-bottom: 10px;">الزمن الذي عشناه حباً منذ اللحظة الأولى:</p>
             <div class="glass-card">
                 <div class="timer-grid">
-                    <div class="timer-box"><span id="days" class="timer-val">0</span><span class="timer-lbl">يوم</span></div>
-                    <div class="timer-box"><span id="hours" class="timer-val">0</span><span class="timer-lbl">ساعة</span></div>
-                    <div class="timer-box"><span id="minutes" class="timer-val">0</span><span class="timer-lbl">دقيقة</span></div>
-                    <div class="timer-box"><span id="seconds" class="timer-val">0</span><span class="timer-lbl">ثانية</span></div>
+                    <div class="timer-box"><span id="days" class="timer-num">0</span><span class="timer-lbl">يوم</span></div>
+                    <div class="timer-box"><span id="hours" class="timer-num">0</span><span class="timer-lbl">ساعة</span></div>
+                    <div class="timer-box"><span id="minutes" class="timer-num">0</span><span class="timer-lbl">دقيقة</span></div>
+                    <div class="timer-box"><span id="seconds" class="timer-num">0</span><span class="timer-lbl">ثانية</span></div>
                 </div>
             </div>
-            <button class="btn-pulse" onclick="travelToPlanet(4, 'purple')">اكتشاف كوكب الأسرار 🌠</button>
+            <button class="btn-gold" onclick="nextStage(3, 'gold')">خمس نجوم ⭐</button>
         </div>
 
-        <!-- المرحلة 4: كوكب المفاجآت (عالم السديم الأرجواني) -->
-        <div id="stage4" class="stage">
-            <span class="planet-badge">🎁 كوكب الأسرار المخفية</span>
-            <h1 class="title-cinematic" style="font-size: 1.7rem;">سرّ عابر للمجرات</h1>
-            <p class="subtitle-cinematic" style="font-size: 0.95rem;">اسحبي شريط الطاقة لتجلية الحقيقة المخفية:</p>
-            <div class="glass-card">
-                <input type="range" min="0" max="100" value="0" oninput="checkSecret(this.value)">
-                <p id="secretText" style="margin-top: 15px; color: #f1c40f; font-family: 'Amiri', serif; font-size: 1.2rem; min-height: 45px;"></p>
-            </div>
-            <button class="btn-pulse" onclick="travelToPlanet(5, 'emerald')">دخول مجرة النجوم ⭐</button>
-        </div>
-
-        <!-- المرحلة 5: كوكب النجوم الخمس (عالم النجوم المتوهجة) -->
-        <div id="stage5" class="stage">
-            <span class="planet-badge">⭐ مجرة النجوم الخمس</span>
-            <h1 class="title-cinematic" style="font-size: 1.7rem;">أبراج الرسائل</h1>
-            <p class="subtitle-cinematic" style="font-size: 0.95rem;">اضغطي على أي نجمة لتضيء رسالتها:</p>
-            
+        <!-- المشهد الثالث: خمس نجوم وخمس رسائل -->
+        <div id="stage3" class="stage">
+            <h1 class="title">خمس نجوم</h1>
+            <p class="desc" style="font-size: 1rem;">اضغطي على النجوم لاكتشاف أسرار الكلام:</p>
             <div class="stars-row">
-                <span class="star-icon" onclick="openStar(1)">⭐</span>
-                <span class="star-icon" onclick="openStar(2)">⭐</span>
-                <span class="star-icon" onclick="openStar(3)">⭐</span>
-                <span class="star-icon" onclick="openStar(4)">⭐</span>
-                <span class="star-icon" onclick="openStar(5)">⭐</span>
+                <span class="star-btn" onclick="openStar(1)">⭐</span>
+                <span class="star-btn" onclick="openStar(2)">⭐</span>
+                <span class="star-btn" onclick="openStar(3)">⭐</span>
+                <span class="star-btn" onclick="openStar(4)">⭐</span>
+                <span class="star-btn" onclick="openStar(5)">⭐</span>
             </div>
-
             <div class="glass-card">
-                <p id="starMsg" style="color: #ffeaa7; font-family: 'Amiri', serif; font-size: 1.2rem; min-height: 50px;">اضغطي نجمة لتتألق الرسالة...</p>
+                <p id="starMsg" style="color: #ffeaa7; font-family: 'Amiri', serif; font-size: 1.15rem; min-height: 50px;">اضغطي على نجمة...</p>
             </div>
-            <button class="btn-pulse" onclick="travelToPlanet(6, 'diamond')">الوصول للكوكب الأبدي 👑</button>
+            <button class="btn-gold" onclick="nextStage(4, 'warm')">ألبوم الذكريات 📸</button>
         </div>
 
-        <!-- المرحلة 6: الكوكب الأبدي (الختام) -->
-        <div id="stage6" class="stage">
-            <span class="planet-badge">👑 الكوكب الأبدي الماسي</span>
-            <h1 class="title-cinematic">إلى الأبد 🤍</h1>
+        <!-- المشهد الرابع: ألبوم الذكريات -->
+        <div id="stage4" class="stage">
+            <h1 class="title">ألبوم الذكريات</h1>
             <div class="glass-card">
-                <p class="subtitle-cinematic" style="margin-bottom: 0;">
-                    «لقد عبرنا كل الكواكب والمجرات، ولم أجد مكاناً أستقر فيه سوى عينيكِ. دمتِ نبضي الأبدي».
-                </p>
+                <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=500" class="album-img" alt="ذكريات">
+                <p class="desc" style="font-size: 1.05rem; margin-bottom: 0;">«كل صورة بيننا هي حكاية اختصرت ألف كلمة وحب».</p>
             </div>
-            <button class="btn-pulse" onclick="travelToPlanet(1, 'gold')">العودة لبداية الرحلة 🔄</button>
+            <button class="btn-gold" onclick="nextStage(5, 'dark')">الرسالة السرية ✉️</button>
+        </div>
+
+        <!-- المشهد الخامس: الرسالة السرية (الظرف) -->
+        <div id="stage5" class="stage">
+            <h1 class="title">الرسالة السرية</h1>
+            <p class="desc" style="font-size: 1rem;">اضغطي على الظرف لفتحه واكتشاف الرسالة:</p>
+            <div class="envelope" onclick="openEnvelope()">✉️</div>
+            <div class="glass-card" id="envelopeCard" style="display: none;">
+                <p id="secretText" style="color: #f1c40f; font-family: 'Amiri', serif; font-size: 1.2rem;"></p>
+            </div>
+            <button class="btn-gold" id="toStage6Btn" style="display: none;" onclick="nextStage(6, 'final')">المفاجأة النهائية 🎁</button>
+        </div>
+
+        <!-- المشهد السادس: المفاجأة النهائية -->
+        <div id="stage6" class="stage">
+            <h1 class="title">المفاجأة النهائية</h1>
+            <div class="gift-box" onclick="openGift()">🎁</div>
+            <div class="glass-card" id="giftCard" style="display: none;">
+                <p class="desc" style="margin-bottom: 0;">«أنتِ أجمل هدية منحني إياها القدر. دمتِ لي حباً ونبضاً لا ينتهي أبداً 🤍»</p>
+            </div>
+            <button class="btn-gold" onclick="nextStage(1, 'gold')">إعادة الرحلة 🔄</button>
         </div>
 
     </div>
 
     <script>
-        // نظام محاكاة الكواكب والفضاء المتغير بالـ Canvas مع الزوم
-        const canvas = document.getElementById('spaceCanvas');
+        const canvas = document.getElementById('starsCanvas');
         const ctx = canvas.getContext('2d');
-        let particles = [];
-        let currentTheme = 'gold';
+        let particles = [], currentTheme = 'gold';
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+
+        for (let i = 0; i < 120; i++) {
+            particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 2, speed: Math.random() * 0.6 + 0.2 });
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
 
-        // إنشاء جزيئات النجوم لكل كوكب
-        function initParticles() {
-            particles = [];
-            let count = 150;
-            for (let i = 0; i < count; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2.5,
-                    speed: Math.random() * 0.8 + 0.2,
-                    alpha: Math.random()
-                });
-            }
-        }
-        initParticles();
-
-        function drawSpace() {
+        function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 20, canvas.width/2, canvas.height/2, canvas.width);
+            if (currentTheme === 'purple') { grad.addColorStop(0, '#1a0933'); grad.addColorStop(1, '#05070f'); }
+            else if (currentTheme === 'warm') { grad.addColorStop(0, '#2d1202'); grad.addColorStop(1, '#05070f'); }
+            else { grad.addColorStop(0, '#0c1222'); grad.addColorStop(1, '#05070f'); }
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // تلوين الخلفية حسب الكوكب الحالي
-            let bgGrad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 50, canvas.width/2, canvas.height/2, canvas.width);
-            if (currentTheme === 'gold') {
-                bgGrad.addColorStop(0, '#120c02'); bgGrad.addColorStop(1, '#020208');
-            } else if (currentTheme === 'blue') {
-                bgGrad.addColorStop(0, '#021024'); bgGrad.addColorStop(1, '#020208');
-            } else if (currentTheme === 'purple') {
-                bgGrad.addColorStop(0, '#150224'); bgGrad.addColorStop(1, '#020208');
-            } else if (currentTheme === 'emerald') {
-                bgGrad.addColorStop(0, '#022415'); bgGrad.addColorStop(1, '#020208');
-            } else {
-                bgGrad.addColorStop(0, '#241a02'); bgGrad.addColorStop(1, '#020208');
-            }
-            ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // رسم النجوم المتحركة
             particles.forEach(p => {
-                ctx.fillStyle = currentTheme === 'blue' ? `rgba(100, 200, 255, ${p.alpha})` : 
-                                currentTheme === 'purple' ? `rgba(216, 112, 147, ${p.alpha})` : 
-                                `rgba(255, 215, 0, ${p.alpha})`;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
-
-                p.y -= p.speed;
-                if (p.y < 0) {
-                    p.y = canvas.height;
-                    p.x = Math.random() * canvas.width;
-                }
+                ctx.fillStyle = "rgba(255, 215, 0, 0.8)";
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+                p.y -= p.speed; if (p.y < 0) p.y = canvas.height;
             });
-            requestAnimationFrame(drawSpace);
+            requestAnimationFrame(draw);
         }
-        drawSpace();
+        draw();
 
-        // نظام السفر بين الكواكب مع تأثير الزوم وسينمائية الكاميرا (Zoom-in & Zoom-out)
-        function travelToPlanet(targetStage, theme) {
-            const container = document.getElementById('mainContainer');
+        function nextStage(s, theme) {
             currentTheme = theme;
-
-            // تأثير الزوم للخارج / الاختفاء السينمائي
-            container.classList.add('zoom-effect');
-
-            setTimeout(() => {
-                // تبديل المرحلة
-                document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
-                document.getElementById('stage' + targetStage).classList.add('active');
-
-                // إزالة الزوم وإرجاع الحجم مع ظهور الكوكب الجديد
-                container.classList.remove('zoom-effect');
-            }, 600);
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById('stage' + s).classList.add('active');
         }
 
         // العداد الحي
         const startDate = new Date("2024-01-01T00:00:00").getTime();
         setInterval(() => {
-            const now = new Date().getTime();
-            const diff = now - startDate;
+            const diff = new Date().getTime() - startDate;
             if (diff > 0) {
                 document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
                 document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -338,26 +196,20 @@
             }
         }, 1000);
 
-        // شريط الأسرار
-        function checkSecret(val) {
-            const txt = document.getElementById("secretText");
-            if (val > 85) {
-                txt.innerText = "«أنتِ النجم الأوحد الذي ينير كل المجرات في حياتي ✨»";
-            } else {
-                txt.innerText = "اسحبي الطاقة حتى النهاية لكشف السر...";
-            }
+        // رسائل النجوم
+        const starMsgs = { 1: "نجمة عينيكِ تضيء أحلك لياليّ.", 2: "كل ثانية معكِ تساوي عمراً كاملاً.", 3: "أنتِ الملاذ والوطن والدفء.", 4: "حبكِ هو السر الذي أتباهى به.", 5: "دمتِ لي نبضاً لا يتوقف أبداً." };
+        function openStar(n) { document.getElementById("starMsg").innerText = starMsgs[n]; }
+
+        // فتح الظرف
+        function openEnvelope() {
+            document.getElementById("envelopeCard").style.display = "block";
+            document.getElementById("secretText").innerText = "«أنتِ السر الذي يبتسم له قلبي كلما مرّ بخاطري».";
+            document.getElementById("toStage6Btn").style.display = "inline-block";
         }
 
-        // رسائل النجوم الخمس
-        const starMsgs = {
-            1: "في كوكب عيونكِ أجد وطني وسلامي.",
-            2: "كل مجرة في الكون تضيق إن غبتِ عني.",
-            3: "أنتِ النبض الذي يمنح الكون معناه الحقيقي.",
-            4: "حكاكتنا أسطورة تتناقلها نجوم الفضاء.",
-            5: "أحبكِ فوق كل كوكب وتحت كل سماء إلى الأبد."
-        };
-        function openStar(num) {
-            document.getElementById("starMsg").innerText = starMsgs[num];
+        // فتح الهدية
+        function openGift() {
+            document.getElementById("giftCard").style.display = "block";
         }
     </script>
 </body>
