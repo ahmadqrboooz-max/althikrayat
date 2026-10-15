@@ -1,289 +1,763 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>نبض الذكريات | Nabad Althikrayat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@500;700&family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
-    
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            color: #ffffff;
-            font-family: 'Tajawal', sans-serif;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            position: relative;
-            transition: background 1.5s ease;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080611">
+<title>نبض الذكريات | رحلة إلى القلب</title>
 
-        /* خلفيات منفصلة لكل مرحلة وعالم */
-        body.theme-1 { background: radial-gradient(circle at center, #0f172a 0%, #030712 100%); }
-        body.theme-2 { background: radial-gradient(circle at center, #2e1065 0%, #090215 100%); }
-        body.theme-3 { background: radial-gradient(circle at center, #451a03 0%, #0c0401 100%); }
-        body.theme-4 { background: radial-gradient(circle at center, #500724 0%, #110208 100%); }
-        body.theme-5 { background: radial-gradient(circle at center, #022c22 0%, #010c09 100%); }
-        body.theme-6 { background: radial-gradient(circle at center, #3b0764 0%, #030208 100%); }
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@400;500;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-        /* تأثير وميض وانطلاق الكوكب من أسفل الشاشة (Warp Transition) */
-        #warpEffect {
-            position: fixed;
-            bottom: -150px;
-            left: 50%;
-            transform: translateX(-50%) scale(0);
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, #fff 0%, #f39c12 50%, transparent 80%);
-            border-radius: 50%;
-            z-index: 99;
-            pointer-events: none;
-            opacity: 0;
-        }
+<style>
+:root {
+  --gold: #f4d58b;
+  --pink: #e6a6cf;
+  --bg: #080611;
+  --text: #fff8ef;
+  --glass: rgba(25, 17, 39, .72);
+}
 
-        @keyframes warpAnim {
-            0% { bottom: -150px; transform: translateX(-50%) scale(0.5); opacity: 1; }
-            50% { width: 400vw; height: 400vw; opacity: 1; }
-            100% { bottom: 120vh; transform: translateX(-50%) scale(2); opacity: 0; }
-        }
+* { box-sizing: border-box; }
 
-        .warp-active {
-            animation: warpAnim 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
 
-        .container {
-            width: 100%;
-            max-width: 440px;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-        }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Tajawal', sans-serif;
+  overflow-x: hidden;
+}
 
-        .stage {
-            display: none;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
+button { font: inherit; }
 
-        .stage.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
+#stars {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
 
-        h1.title {
-            font-family: 'Reem Kufi', sans-serif;
-            font-size: 2.3rem;
-            background: linear-gradient(135deg, #fff, #ffeaa7, #f39c12);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(243, 156, 18, 0.5);
-            margin-bottom: 12px;
-        }
+.aurora {
+  position: fixed;
+  inset: -30%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 25% 30%, #612a8250, transparent 45%),
+    radial-gradient(ellipse at 75% 70%, #8b315330, transparent 40%);
+  filter: blur(30px);
+  animation: aurora 15s ease-in-out infinite alternate;
+}
 
-        p.desc {
-            font-family: 'Amiri', serif;
-            font-size: 1.2rem;
-            color: #e2e8f0;
-            line-height: 1.8;
-            margin-bottom: 25px;
-        }
+@keyframes aurora {
+  to { transform: translate(4%, -3%) rotate(8deg); }
+}
 
-        .planet-tag {
-            display: inline-block;
-            padding: 5px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #f1c40f;
-            margin-bottom: 15px;
-        }
+.progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 3px;
+  width: 0;
+  background: linear-gradient(90deg, var(--pink), var(--gold));
+  z-index: 30;
+}
 
-        .glass-box {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(243, 156, 18, 0.3);
-            border-radius: 22px;
-            padding: 25px 18px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            margin-bottom: 20px;
-        }
+.brand {
+  position: fixed;
+  top: 17px;
+  left: 15px;
+  z-index: 10;
+  color: var(--gold);
+  font-size: 12px;
+  letter-spacing: 2px;
+}
 
-        .btn-gold {
-            width: 88%;
-            padding: 15px 25px;
-            background: linear-gradient(135deg, #f39c12, #d35400);
-            color: #fff;
-            border: none;
-            border-radius: 40px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(243, 156, 18, 0.4);
-        }
+.scene {
+  min-height: 100svh;
+  padding: 80px 20px 55px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  isolation: isolate;
+  scroll-snap-align: start;
+  overflow: hidden;
+}
 
-        /* العداد الحي */
-        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .timer-box { background: rgba(5, 7, 15, 0.8); border: 1px solid rgba(243, 156, 18, 0.4); border-radius: 12px; padding: 10px 2px; }
-        .timer-num { font-size: 1.4rem; font-weight: bold; color: #f1c40f; display: block; }
-        .timer-lbl { font-size: 0.75rem; color: #a0aec0; }
+.scene::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: min(85vw, 550px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid #f4d58b12;
+  box-shadow: 0 0 100px #a66ce512;
+}
 
-        /* النجوم */
-        .stars-row { display: flex; justify-content: center; gap: 12px; margin: 15px 0; }
-        .star-btn { font-size: 2.2rem; cursor: pointer; filter: drop-shadow(0 0 10px #f39c12); transition: transform 0.3s; }
-        .star-btn:active { transform: scale(1.3) rotate(15deg); }
+.content {
+  width: 100%;
+  max-width: 570px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(25px);
+  transition: .8s ease;
+}
 
-        /* ألبوم الصور */
-        .album-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 15px; border: 1px solid rgba(243, 156, 18, 0.4); margin-bottom: 12px; }
+.scene.visible .content {
+  opacity: 1;
+  transform: none;
+}
 
-        /* الظرف */
-        .envelope { width: 120px; height: 85px; background: linear-gradient(135deg, #d35400, #e67e22); margin: 10px auto 20px auto; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem; cursor: pointer; box-shadow: 0 0 20px rgba(211,84,0,0.6); }
+.tag {
+  display: inline-block;
+  padding: 8px 15px;
+  border: 1px solid #f4d58b40;
+  border-radius: 30px;
+  color: var(--gold);
+  background: #ffffff08;
+  margin-bottom: 22px;
+  font-size: 13px;
+}
 
-        /* الهدية */
-        .gift-box { font-size: 4.5rem; cursor: pointer; animation: bounce 1.5s infinite; margin-bottom: 15px; display: inline-block; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    </style>
+h1, h2 {
+  font-family: 'Reem Kufi', sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: clamp(40px, 10vw, 68px);
+  background: linear-gradient(120deg, #fff, var(--gold), var(--pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 0 0 15px;
+}
+
+h2 {
+  font-size: clamp(28px, 7vw, 42px);
+  margin: 0 0 14px;
+}
+
+p {
+  font-family: 'Amiri', serif;
+  font-size: 21px;
+  line-height: 1.9;
+  color: #e6dce9;
+}
+
+.muted { color: #b9aec6; font-size: 17px; }
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 50px;
+  padding: 13px 25px;
+  border: 1px solid var(--gold);
+  border-radius: 50px;
+  background: linear-gradient(120deg, #f4d58b, #bd824b);
+  color: #211329;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 30px #e3b96b25;
+  transition: .25s;
+}
+
+.button:hover { transform: translateY(-3px); }
+
+.button.secondary {
+  color: white;
+  background: #ffffff09;
+  border-color: #ffffff35;
+  box-shadow: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+
+.orbit {
+  width: 205px;
+  aspect-ratio: 1;
+  margin: 0 auto 25px;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.orbit::before, .orbit::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid #f4d58b50;
+  border-radius: 50%;
+  transform: scaleY(.35) rotate(-25deg);
+  animation: spin 12s linear infinite;
+}
+
+.orbit::after {
+  inset: -12px;
+  border-color: #d8a5ed60;
+  transform: scaleY(.45) rotate(45deg);
+  animation-duration: 17s;
+  animation-direction: reverse;
+}
+
+@keyframes spin { to { rotate: 360deg; } }
+
+.planet {
+  width: 95px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, white, #d9a8e7 20%, #734a9a 55%, #171024 78%);
+  box-shadow: 0 0 45px #bb80df80, 0 0 100px #8d54b550;
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  50% { transform: scale(1.1); }
+}
+
+.panel {
+  padding: 23px 17px;
+  border: 1px solid #f4d58b30;
+  border-radius: 24px;
+  background: var(--glass);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 20px 70px #0004;
+}
+
+.timer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.time {
+  background: #070610cc;
+  border: 1px solid #f4d58b22;
+  border-radius: 14px;
+  padding: 12px 2px;
+}
+
+.time strong {
+  display: block;
+  color: var(--gold);
+  font-family: 'Reem Kufi';
+  font-size: clamp(20px, 5vw, 32px);
+  font-variant-numeric: tabular-nums;
+}
+
+.time span {
+  color: #bcb1c9;
+  font-size: 12px;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: clamp(2px, 2vw, 12px);
+  margin: 22px 0;
+}
+
+.star {
+  border: 0;
+  background: none;
+  color: #66536f;
+  font-size: clamp(30px, 8vw, 46px);
+  cursor: pointer;
+  transition: .25s;
+}
+
+.star.active, .star:hover {
+  color: var(--gold);
+  transform: translateY(-5px) scale(1.12);
+  filter: drop-shadow(0 0 10px #f4d58b);
+}
+
+.message {
+  min-height: 100px;
+  display: grid;
+  place-items: center;
+  color: var(--gold);
+  font-size: 22px;
+  line-height: 1.8;
+  font-family: 'Amiri', serif;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 25px 0;
+}
+
+.photo {
+  aspect-ratio: 3 / 4;
+  border: 1px solid #f4d58b45;
+  border-radius: 18px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #39234a, #120d1b);
+  display: grid;
+  place-items: center;
+  color: #d9c7e2;
+  font-size: 14px;
+  padding: 8px;
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.envelope-wrap {
+  width: 170px;
+  height: 120px;
+  margin: 30px auto;
+  perspective: 700px;
+  cursor: pointer;
+}
+
+.envelope {
+  height: 100%;
+  border-radius: 8px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(140deg, #d7a0bb, #73375f);
+  box-shadow: 0 15px 45px #c77aa533;
+  font-size: 30px;
+}
+
+.envelope::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(140deg, #f0c5d6, #a75f86);
+  clip-path: polygon(0 0, 100% 0, 50% 60%);
+  transform-origin: top;
+  transition: transform .7s;
+}
+
+.envelope.open::before {
+  transform: rotateX(180deg);
+}
+
+.seal {
+  position: relative;
+  z-index: 2;
+  color: #793f62;
+  background: var(--gold);
+  border-radius: 50%;
+  padding: 8px;
+}
+
+.reveal {
+  display: none;
+  animation: reveal .7s ease both;
+}
+
+.reveal.show { display: block; }
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: none; }
+}
+
+.gift {
+  font-size: 100px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  50% { transform: translateY(-12px) rotate(3deg); }
+}
+
+.footer {
+  position: absolute;
+  bottom: 18px;
+  color: #92849d;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+@media(max-width:360px) {
+  .scene { padding-inline: 13px; }
+  .panel { padding: 16px 10px; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
 </head>
-<body class="theme-1">
 
-    <!-- عنصر الوميض وانطلاق الكوكب -->
-    <div id="warpEffect"></div>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="aurora"></div>
+<div class="progress" id="progress"></div>
+<div class="brand">NABAD · ALTHIKRAYAT</div>
 
-    <div class="container">
-        
-        <!-- المشهد 1 -->
-        <div id="stage1" class="stage active">
-            <span class="planet-tag">🌟 كوكب البداية السحرية</span>
-            <h1 class="title">نبض الذكريات</h1>
-            <p class="desc">هناك حكايات صُنعت من نور النجوم... لتُعاش بكل جوارح المشاعر ✨</p>
-            <button class="btn-gold" onclick="travelToStage(2, 'theme-2')">ابدئي الرحلة 🚀</button>
-        </div>
+<audio id="music" loop preload="none"></audio>
+<button class="button secondary" id="musicButton"
+ style="position:fixed;top:12px;right:12px;z-index:20;padding:8px 13px;min-height:0">
+ ♫ الموسيقى
+</button>
 
-        <!-- المشهد 2 -->
-        <div id="stage2" class="stage">
-            <span class="planet-tag">⏳ كوكب حكاية الوقت</span>
-            <h1 class="title">نبض حكايتنا</h1>
-            <p class="desc" style="font-size: 1rem; margin-bottom: 10px;">الزمن الذي عشناه حباً منذ اللحظة الأولى:</p>
-            <div class="glass-box">
-                <div class="timer-grid">
-                    <div class="timer-box"><span id="days" class="timer-num">0</span><span class="timer-lbl">يوم</span></div>
-                    <div class="timer-box"><span id="hours" class="timer-num">0</span><span class="timer-lbl">ساعة</span></div>
-                    <div class="timer-box"><span id="minutes" class="timer-num">0</span><span class="timer-lbl">دقيقة</span></div>
-                    <div class="timer-box"><span id="seconds" class="timer-num">0</span><span class="timer-lbl">ثانية</span></div>
-                </div>
-            </div>
-            <button class="btn-gold" onclick="travelToStage(3, 'theme-3')">مجرة النجوم ⭐</button>
-        </div>
+<!-- عدّل بيانات الهدية من هذا المكان -->
+<script>
+const GIFT = {
+  startDate: "2025-09-25T00:00:00+03:00",
 
-        <!-- المشهد 3 -->
-        <div id="stage3" class="stage">
-            <span class="planet-tag">⭐ مجرة الرسائل الخمس</span>
-            <h1 class="title">خمس نجوم</h1>
-            <p class="desc" style="font-size: 0.95rem;">اضغطي على النجوم لاكتشاف أسرار الكلام:</p>
-            <div class="stars-row">
-                <span class="star-btn" onclick="openStar(1)">⭐</span>
-                <span class="star-btn" onclick="openStar(2)">⭐</span>
-                <span class="star-btn" onclick="openStar(3)">⭐</span>
-                <span class="star-btn" onclick="openStar(4)">⭐</span>
-                <span class="star-btn" onclick="openStar(5)">⭐</span>
-            </div>
-            <div class="glass-box">
-                <p id="starMsg" style="color: #ffeaa7; font-family: 'Amiri', serif; font-size: 1.15rem; min-height: 50px;">اضغطي على نجمة...</p>
-            </div>
-            <button class="btn-gold" onclick="travelToStage(4, 'theme-4')">ألبوم الذكريات 📸</button>
-        </div>
+  intro: "بعض الحكايات لا تبدأ بكلمة… بل بنبضة تغيّر كل شيء.",
 
-        <!-- المشهد 4 -->
-        <div id="stage4" class="stage">
-            <span class="planet-tag">📸 عالم الصور والذكريات</span>
-            <h1 class="title">ألبوم الذكريات</h1>
-            <div class="glass-box">
-                <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=500" class="album-img" alt="ذكريات">
-                <p class="desc" style="font-size: 1rem; margin-bottom: 0;">«كل صورة بيننا هي حكاية اختصرت ألف كلمة وحب صادق».</p>
-            </div>
-            <button class="btn-gold" onclick="travelToStage(5, 'theme-5')">الرسالة السرية ✉️</button>
-        </div>
+  timerCaption: "ومنذ تلك اللحظة، والوقت يكتب حكايتنا.",
 
-        <!-- المشهد 5 -->
-        <div id="stage5" class="stage">
-            <span class="planet-tag">✉️ كوكب الظرف المضيء</span>
-            <h1 class="title">الرسالة السرية</h1>
-            <p class="desc" style="font-size: 0.95rem;">اضغطي على الظرف لفتحه واكتشاف ما بداخله:</p>
-            <div class="envelope" onclick="openEnvelope()">✉️</div>
-            <div class="glass-box" id="envelopeCard" style="display: none;">
-                <p id="secretText" style="color: #f1c40f; font-family: 'Amiri', serif; font-size: 1.15rem;"></p>
-            </div>
-            <button class="btn-gold" id="toStage6Btn" style="display: none;" onclick="travelToStage(6, 'theme-6')">المفاجأة النهائية 🎁</button>
-        </div>
+  stars: [
+    "فيك شيء يجعل العالم أهدأ، وقلبي أكثر طمأنينة.",
+    "لو عاد الزمن، لاخترت اللحظة التي جمعتني بك من جديد.",
+    "أنت التفاصيل الصغيرة التي تجعل الأيام الكبيرة جميلة.",
+    "بعض الأشخاص وطن… وأنت أجمل أوطاني.",
+    "ستبقى لك في القلب حكاية لا تشبه أحداً."
+  ],
 
-        <!-- المشهد 6 -->
-        <div id="stage6" class="stage">
-            <span class="planet-tag">👑 الكوكب الأبدي النهائي</span>
-            <h1 class="title">المفاجأة النهائية</h1>
-            <div class="gift-box" onclick="openGift()">🎁</div>
-            <div class="glass-box" id="giftCard" style="display: none;">
-                <p class="desc" style="margin-bottom: 0;">«أنتِ أجمل هدية منحني إياها القدر. دمتِ لي حباً ونبضاً لا ينتهي أبداً 🤍»</p>
-            </div>
-            <button class="btn-gold" onclick="travelToStage(1, 'theme-1')">إعادة الرحلة 🔄</button>
-        </div>
+  photos: [
+    "",
+    ""
+  ],
 
+  secretMessage:
+    "لو استطعت أن أعطيك شيئاً واحداً في الحياة، لأعطيتك القدرة على رؤية نفسك بعينيّ… لتعرف كم أنت غالٍ.",
+
+  finalMessage:
+    "هذه ليست مجرد هدية… إنها طريقة صغيرة لأقول لك إن وجودك يصنع فرقاً كبيراً في قلبي. 🤍",
+
+  musicUrl: ""
+};
+</script>
+
+<main>
+<section class="scene visible" id="s1">
+  <div class="content">
+    <div class="orbit"><div class="planet"></div></div>
+    <div class="tag">رحلة صُنعت لشخص واحد</div>
+    <h1>نبض الذكريات</h1>
+    <p id="intro"></p>
+    <div class="actions">
+      <button class="button" onclick="go('s2')">ابدئي الرحلة ✦</button>
+    </div>
+  </div>
+  <div class="footer">كل نبضة تقرّبنا من ذكرى</div>
+</section>
+
+<section class="scene" id="s2">
+  <div class="content">
+    <div class="tag">الفصل الأول · حكاية الوقت</div>
+    <h2>منذ تلك اللحظة…</h2>
+    <p id="timerCaption"></p>
+    <div class="panel">
+      <div class="timer">
+        <div class="time"><strong id="days">—</strong><span>يوم</span></div>
+        <div class="time"><strong id="hours">—</strong><span>ساعة</span></div>
+        <div class="time"><strong id="minutes">—</strong><span>دقيقة</span></div>
+        <div class="time"><strong id="seconds">—</strong><span>ثانية</span></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="button" onclick="go('s3')">اكتشفي النجوم ✦</button>
+    </div>
+  </div>
+  <div class="footer">الفصل الأول · الوقت لا ينسى</div>
+</section>
+
+<section class="scene" id="s3">
+  <div class="content">
+    <div class="tag">الفصل الثاني · رسائل من القلب</div>
+    <h2>خمس نجوم… وخمسة أسرار</h2>
+    <p class="muted">اختاري نجمة لتكتشفي الرسالة التي تخبئها.</p>
+
+    <div class="stars">
+      <button class="star" aria-label="الرسالة الأولى" onclick="openStar(0)">✦</button>
+      <button class="star" aria-label="الرسالة الثانية" onclick="openStar(1)">✦</button>
+      <button class="star" aria-label="الرسالة الثالثة" onclick="openStar(2)">✦</button>
+      <button class="star" aria-label="الرسالة الرابعة" onclick="openStar(3)">✦</button>
+      <button class="star" aria-label="الرسالة الخامسة" onclick="openStar(4)">✦</button>
     </div>
 
-    <script>
-        // دالة السفر السينمائي بين الكواكب (Warp & Theme Switch)
-        function travelToStage(targetStage, themeClass) {
-            const warp = document.getElementById('warpEffect');
-            
-            // تشغيل تأثير الوميض وانطلاق الكوكب من أسفل الشاشة
-            warp.classList.add('warp-active');
+    <div class="panel message" id="starMessage" aria-live="polite">
+      المسّي نجمة لتضيء رسالتها…
+    </div>
 
-            setTimeout(() => {
-                // تغيير خلفية الصفحة بالكامل حسب جو المشهد
-                document.body.className = themeClass;
+    <div class="actions">
+      <button class="button" onclick="go('s4')">ألبوم الذكريات 📸</button>
+    </div>
+  </div>
+  <div class="footer">الفصل الثاني · أشياء من القلب</div>
+</section>
 
-                // تبديل المشهد المعروض
-                document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
-                document.getElementById('stage' + targetStage).classList.add('active');
-            }, 450);
+<section class="scene" id="s4">
+  <div class="content">
+    <div class="tag">الفصل الثالث · لحظات تستحق البقاء</div>
+    <h2>لو استطاعت الصور الكلام…</h2>
+    <p>لكانت حكت عن ألف شعور خبأته لحظة واحدة.</p>
 
-            setTimeout(() => {
-                warp.classList.remove('warp-active');
-            }, 900);
-        }
+    <div class="gallery">
+      <div class="photo" id="photo1">الصورة الأولى</div>
+      <div class="photo" id="photo2">الصورة الثانية</div>
+    </div>
 
-        // العداد الحي
-        const startDate = new Date("2024-01-01T00:00:00").getTime();
-        setInterval(() => {
-            const diff = new Date().getTime() - startDate;
-            if (diff > 0) {
-                document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-                document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000);
-            }
-        }, 1000);
+    <div class="actions">
+      <button class="button" onclick="go('s5')">هناك رسالة تنتظرك ✉</button>
+    </div>
+  </div>
+  <div class="footer">الفصل الثالث · صور تختصر العمر</div>
+</section>
 
-        // رسائل النجوم
-        const starMsgs = { 1: "نجمة عينيكِ تضيء أحلك لياليّ.", 2: "كل ثانية معكِ تساوي عمراً كاملاً.", 3: "أنتِ الملاذ والوطن والدفء.", 4: "حبكِ هو السر الذي أتباهى به.", 5: "دمتِ لي نبضاً لا يتوقف أبداً." };
-        function openStar(n) { document.getElementById("starMsg").innerText = starMsgs[n]; }
+<section class="scene" id="s5">
+  <div class="content">
+    <div class="tag">الفصل الرابع · كلمات لم تُنسَ</div>
+    <h2>رسالة لك وحدك</h2>
+    <p>في داخل هذا الظرف كلمات خرجت من القلب… افتحيه.</p>
 
-        // فتح الظرف
-        function openEnvelope() {
-            document.getElementById("envelopeCard").style.display = "block";
-            document.getElementById("secretText").innerText = "«أنتِ السر الذي يبتسم له قلبي كلما مرّ بخاطري».";
-            document.getElementById("toStage6Btn").style.display = "inline-block";
-        }
+    <div class="envelope-wrap" role="button" tabindex="0"
+         aria-label="فتح الرسالة"
+         onclick="openLetter()"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLetter()}">
+      <div class="envelope" id="envelope"><span class="seal">♥</span></div>
+    </div>
 
-        // فتح الهدية
-        function openGift() {
-            document.getElementById("giftCard").style.display = "block";
-        }
-    </script>
+    <div class="panel reveal" id="letter">
+      <p id="secretMessage" style="color:var(--gold)"></p>
+    </div>
+
+    <div class="actions">
+      <button class="button" id="letterNext" style="display:none"
+              onclick="go('s6')">المفاجأة الأخيرة 🎁</button>
+    </div>
+  </div>
+  <div class="footer">الفصل الرابع · من القلب مباشرة</div>
+</section>
+
+<section class="scene" id="s6">
+  <div class="content">
+    <div class="tag">الفصل الأخير · والحكاية مستمرة</div>
+    <h2>شيء صغير… يحمل الكثير</h2>
+    <p>اضغطي على الهدية، فبعض المشاعر لا تظهر إلا عندما نفتحها.</p>
+
+    <button class="gift" id="giftButton" aria-label="فتح الهدية"
+            onclick="openGift()">🎁</button>
+
+    <div class="panel reveal" id="giftMessage">
+      <p id="finalMessage"></p>
+      <p style="color:var(--gold);font-size:17px">صُنعت هذه اللحظة لك وحدك ♡</p>
+    </div>
+
+    <div class="actions">
+      <button class="button secondary" onclick="go('s1')">عيشي الرحلة من جديد ↺</button>
+    </div>
+  </div>
+  <div class="footer">NABAD ALTHIKRAYAT · ذكرى تبقى</div>
+</section>
+</main>
+
+<script>
+// تجهيز محتوى الهدية
+document.getElementById("intro").textContent = GIFT.intro;
+document.getElementById("timerCaption").textContent = GIFT.timerCaption;
+document.getElementById("secretMessage").textContent = GIFT.secretMessage;
+document.getElementById("finalMessage").textContent = GIFT.finalMessage;
+
+GIFT.photos.forEach((url, i) => {
+  const box = document.getElementById("photo" + (i + 1));
+  if (url) {
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = "ذكرى جميلة";
+    img.loading = "lazy";
+    box.replaceChildren(img);
+  }
+});
+
+// إظهار كل فصل عند الوصول إليه
+const scenes = document.querySelectorAll(".scene");
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add("visible");
+  });
+}, { threshold: 0.2 });
+
+scenes.forEach(scene => observer.observe(scene));
+
+function go(id) {
+  document.getElementById(id).scrollIntoView({
+    behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto" : "smooth"
+  });
+}
+
+// شريط التقدم
+window.addEventListener("scroll", () => {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  document.getElementById("progress").style.width =
+    (max > 0 ? scrollY / max * 100 : 0) + "%";
+}, { passive: true });
+
+// عداد العلاقة
+const start = new Date(GIFT.startDate).getTime();
+
+function updateTimer() {
+  const diff = Date.now() - start;
+  const ids = ["days", "hours", "minutes", "seconds"];
+
+  if (!Number.isFinite(start) || diff < 0) {
+    ids.forEach(id => document.getElementById(id).textContent = "—");
+    return;
+  }
+
+  const total = Math.floor(diff / 1000);
+  const values = [
+    Math.floor(total / 86400),
+    Math.floor(total % 86400 / 3600),
+    Math.floor(total % 3600 / 60),
+    total % 60
+  ];
+
+  ids.forEach((id, i) => {
+    document.getElementById(id).textContent =
+      values[i].toLocaleString("ar");
+  });
+}
+
+updateTimer();
+setInterval(updateTimer, 1000);
+
+// النجوم والرسائل
+function openStar(index) {
+  document.querySelectorAll(".star").forEach((star, i) => {
+    star.classList.toggle("active", i === index);
+  });
+
+  document.getElementById("starMessage").textContent =
+    GIFT.stars[index] || "هناك رسالة جميلة تنتظرك.";
+}
+
+// فتح الظرف
+function openLetter() {
+  document.getElementById("envelope").classList.add("open");
+  document.getElementById("letter").classList.add("show");
+  document.getElementById("letterNext").style.display = "inline-flex";
+}
+
+// فتح الهدية
+function openGift() {
+  document.getElementById("giftMessage").classList.add("show");
+  document.getElementById("giftButton").textContent = "💝";
+}
+
+// الموسيقى: المتصفح يتطلب تفاعلاً من المستخدم للتشغيل
+const music = document.getElementById("music");
+const musicButton = document.getElementById("musicButton");
+
+if (GIFT.musicUrl) music.src = GIFT.musicUrl;
+
+musicButton.addEventListener("click", async () => {
+  if (!GIFT.musicUrl) {
+    musicButton.textContent = "أضيفي رابط الموسيقى في إعدادات GIFT";
+    return;
+  }
+
+  try {
+    if (music.paused) {
+      await music.play();
+      musicButton.textContent = "♫ إيقاف الموسيقى";
+    } else {
+      music.pause();
+      musicButton.textContent = "♫ تشغيل الموسيقى";
+    }
+  } catch {
+    musicButton.textContent = "اضغطي للتشغيل مجدداً";
+  }
+});
+
+// خلفية نجوم متحركة
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+let stars = [];
+let W = 0, H = 0;
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function resizeStars() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth;
+  H = innerHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const count = Math.min(180, Math.floor(W * H / 6500));
+
+  stars = Array.from({ length: count }, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    r: Math.random() * 1.3 + 0.3,
+    a: Math.random() * 0.6 + 0.2,
+    speed: Math.random() * 0.2 + 0.03,
+    phase: Math.random() * 6
+  }));
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, W, H);
+
+  stars.forEach(star => {
+    star.phase += 0.02;
+    if (!reducedMotion) star.y -= star.speed;
+    if (star.y < 0) star.y = H;
+
+    ctx.globalAlpha = star.a *
+      (0.7 + 0.3 * Math.sin(star.phase));
+
+    ctx.fillStyle = star.r > 1.2 ? "#f4d58b" : "#ffffff";
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  ctx.globalAlpha = 1;
+
+  if (!reducedMotion) requestAnimationFrame(drawStars);
+}
+
+resizeStars();
+drawStars();
+
+window.addEventListener("resize", () => {
+  resizeStars();
+  if (reducedMotion) drawStars();
+});
+</script>
 </body>
 </html>
