@@ -2,13 +2,16 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>نبض الذكريات | Nabad Althikrayat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- خطوط عربية فاخرة وسينمائية -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,400&family=Reem+Kufi:wght@500;700&family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
+    
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            background: #05070f;
+            background: #020208;
             color: #ffffff;
             font-family: 'Tajawal', sans-serif;
             overflow-x: hidden;
@@ -17,108 +20,334 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
         }
-        .stars-bg {
+
+        /* خلفية النجوم والتأثيرات الفضائية */
+        #starsCanvas {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-            z-index: -1;
+            z-index: 0;
+            pointer-events: none;
         }
-        .container { width: 100%; max-width: 480px; text-align: center; }
-        .stage { display: none; opacity: 0; transition: opacity 0.6s ease; }
-        .stage.active { display: block; opacity: 1; }
-        h1.title {
+
+        .container {
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* المراحل بالتأثيرات السينمائية */
+        .stage {
+            display: none;
+            opacity: 0;
+            transform: scale(0.92) translateY(30px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .stage.active {
+            display: block;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* العناوين الملكية */
+        h1.title-cinematic {
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: 2.6rem;
+            background: linear-gradient(135deg, #fff 0%, #ffeaa7 50%, #f39c12 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(243, 156, 18, 0.6);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        p.subtitle-cinematic {
             font-family: 'Amiri', serif;
-            font-size: 2.2rem;
-            color: #f39c12;
-            text-shadow: 0 0 15px rgba(243, 156, 18, 0.4);
-            margin-bottom: 15px;
+            font-size: 1.25rem;
+            color: #e2e8f0;
+            line-height: 1.9;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
-        p.description {
-            font-size: 1.1rem;
-            color: #d1d5db;
-            line-height: 1.8;
+
+        /* البطاقة الزجاجية الفاخرة */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(243, 156, 18, 0.3);
+            border-radius: 24px;
+            padding: 30px 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(243, 156, 18, 0.1);
             margin-bottom: 25px;
-            font-weight: 300;
+            position: relative;
+            overflow: hidden;
         }
-        .btn-gold {
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(243,156,18,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* الزر الذهبي النابض الخرافي */
+        .btn-pulse {
             display: inline-block;
-            padding: 14px 35px;
-            background: linear-gradient(135deg, #f39c12, #d35400);
-            color: #fff;
+            width: 85%;
+            padding: 16px 30px;
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 50%, #d35400 100%);
+            color: #ffffff;
             border: none;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            font-family: 'Tajawal', sans-serif;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(243, 156, 18, 0.4);
-            margin-top: 15px;
+            box-shadow: 0 0 25px rgba(243, 156, 18, 0.5), 0 8px 20px rgba(0,0,0,0.4);
+            animation: pulseGlow 2s infinite alternate;
+            transition: transform 0.2s ease;
         }
-        .card-box {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(243, 156, 18, 0.2);
-            padding: 25px 20px;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-            margin-bottom: 20px;
+
+        .btn-pulse:active {
+            transform: scale(0.95);
         }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px rgba(243, 156, 18, 0.4), 0 0 30px rgba(243, 156, 18, 0.2); }
+            100% { box-shadow: 0 0 30px rgba(243, 156, 18, 0.8), 0 0 50px rgba(243, 156, 18, 0.4); }
+        }
+
+        /* العداد الحي السينمائي */
         .timer-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
+            gap: 10px;
             margin-top: 15px;
         }
-        .timer-item {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(243, 156, 18, 0.3);
-            border-radius: 10px;
-            padding: 10px 2px;
+
+        .timer-box {
+            background: rgba(5, 7, 15, 0.8);
+            border: 1px solid rgba(243, 156, 18, 0.4);
+            border-radius: 16px;
+            padding: 12px 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-        .timer-number { font-size: 1.3rem; font-weight: bold; color: #f39c12; display: block; }
-        .timer-label { font-size: 0.75rem; color: #9ca3af; }
-        
-        /* النجوم الخمس */
-        .stars-container { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
-        .star-btn {
-            background: none; border: none; font-size: 2rem; cursor: pointer;
-            filter: drop-shadow(0 0 5px rgba(243, 156, 18, 0.5));
-            transition: transform 0.2s;
+
+        .timer-val {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #f1c40f;
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+            display: block;
         }
-        .star-btn:active { transform: scale(1.2); }
-        
-        /* الشريط المنزلق */
-        .slider-box { margin: 20px 0; }
-        input[type=range] { width: 100%; accent-color: #f39c12; cursor: pointer; }
+
+        .timer-lbl { font-size: 0.75rem; color: #a0aec0; margin-top: 4px; }
+
+        /* النجوم الخمس الملكية */
+        .stars-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .star-icon {
+            font-size: 2.2rem;
+            cursor: pointer;
+            filter: drop-shadow(0 0 10px rgba(243, 156, 18, 0.8));
+            transition: all 0.3s ease;
+        }
+
+        .star-icon:hover, .star-icon:active {
+            transform: scale(1.3) rotate(15deg);
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1));
+        }
+
+        /* الشريط التفاعلي */
+        input[type=range] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.2);
+            outline: none;
+            accent-color: #f39c12;
+        }
     </style>
 </head>
 <body>
 
-    <div class="stars-bg"></div>
+    <!-- خلفية النجوم والتأثيرات المتحركة -->
+    <canvas id="starsCanvas"></canvas>
 
     <div class="container">
         
-        <!-- المرحلة 1: الدخول السينمائي -->
+        <!-- المرحلة 1: الدخول السينمائي الخرافي -->
         <div id="stage1" class="stage active">
-            <h1 class="title">نبض الذكريات</h1>
-            <p class="description">هناك حكايات صُنعت لتُعاش بكل المشاعر...</p>
-            <button class="btn-gold" onclick="nextStage(2)">ابدئي رحلتك ✨</button>
+            <h1 class="title-cinematic">نبض الذكريات</h1>
+            <p class="subtitle-cinematic">هناك حكايات لا تُحكى بالكلمات فقط... بل تُعاش وتُحس في أعماق الروح ✨</p>
+            <button class="btn-pulse" onclick="nextStage(2)">ابدئي رحلتكِ السينمائية ✨</button>
         </div>
 
         <!-- المرحلة 2: بداية الحكاية -->
         <div id="stage2" class="stage">
-            <div class="card-box">
-                <h1 class="title" style="font-size: 1.6rem;">بداية الحكاية</h1>
-                <p class="description" style="margin-bottom: 0;">
-                    «بعض اللحظات لا تُقاس بالوقت، بل بالأثر الذي تتركه في الروح... واليوم نبدأ حكايتنا معاً».
+            <div class="glass-card">
+                <h1 class="title-cinematic" style="font-size: 2rem;">بداية الحكاية</h1>
+                <p class="subtitle-cinematic" style="margin-bottom: 0;">
+                    «بعض اللحظات لا تُقاس بالأيام ولا بالسنين... بل بنبضات القلب التي خفقت لكِ وحدكِ منذ اللحظة الأولى».
                 </p>
             </div>
-            <button class="btn-gold" onclick="nextStage(3)">تابعي الرحلة 🤍</button>
+            <button class="btn-pulse" onclick="nextStage(3)">تابعي السحر 🤍</button>
         </div>
 
-        <!-- المرحلة 3: العداد الحي -->
+        <!-- المرحلة 3: عداد الذكريات الحي الفاخر -->
         <div id="stage3" class="stage">
-            <h1 class="title">نبض حكايتنا</h1>
-            <p
-                
+            <h1 class="title-cinematic" style="font-size: 2rem;">نبض حكايتنا</h1>
+            <p class="subtitle-cinematic" style="font-size: 1.1rem; margin-bottom: 10px;">الوقت الذي عشناه معاً حباً وشغفاً:</p>
+            
+            <div class="glass-card">
+                <div class="timer-grid">
+                    <div class="timer-box"><span id="days" class="timer-val">0</span><span class="timer-lbl">يوم</span></div>
+                    <div class="timer-box"><span id="hours" class="timer-val">0</span><span class="timer-lbl">ساعة</span></div>
+                    <div class="timer-box"><span id="minutes" class="timer-val">0</span><span class="timer-lbl">دقيقة</span></div>
+                    <div class="timer-box"><span id="seconds" class="timer-val">0</span><span class="timer-lbl">ثانية</span></div>
+                </div>
+            </div>
+            <button class="btn-pulse" onclick="nextStage(4)">اكتشفي المفاجأة 🎁</button>
+        </div>
+
+        <!-- المرحلة 4: الشريط المنزلق للمفاجأة -->
+        <div id="stage4" class="stage">
+            <h1 class="title-cinematic" style="font-size: 1.8rem;">سرّ خفي</h1>
+            <p class="subtitle-cinematic" style="font-size: 1rem;">اسحبي الشريط للجهة الأخرى لاكتشاف السر:</p>
+            <div class="glass-card">
+                <input type="range" min="0" max="100" value="0" oninput="checkSecret(this.value)">
+                <p id="secretText" style="margin-top: 20px; color: #f1c40f; font-family: 'Amiri', serif; font-size: 1.3rem; min-height: 50px;"></p>
+            </div>
+            <button class="btn-pulse" onclick="nextStage(5)">إلى سماء الرسائل ⭐</button>
+        </div>
+
+        <!-- المرحلة 5: النجوم الخمس الفاخرة -->
+        <div id="stage5" class="stage">
+            <h1 class="title-cinematic" style="font-size: 1.8rem;">نجوم الذكريات</h1>
+            <p class="subtitle-cinematic" style="font-size: 1rem;">اضغطي على النجوم لتفتحي رسائلكِ الخاصة:</p>
+            
+            <div class="stars-row">
+                <span class="star-icon" onclick="openStar(1)">⭐</span>
+                <span class="star-icon" onclick="openStar(2)">⭐</span>
+                <span class="star-icon" onclick="openStar(3)">⭐</span>
+                <span class="star-icon" onclick="openStar(4)">⭐</span>
+                <span class="star-icon" onclick="openStar(5)">⭐</span>
+            </div>
+
+            <div class="glass-card">
+                <p id="starMsg" style="color: #ffeaa7; font-family: 'Amiri', serif; font-size: 1.3rem; min-height: 60px;">اضغطي على إحدى النجوم...</p>
+            </div>
+            <button class="btn-pulse" onclick="nextStage(6)">الختام الأبدي 👑</button>
+        </div>
+
+        <!-- المرحلة 6: الهدية الختامية -->
+        <div id="stage6" class="stage">
+            <h1 class="title-cinematic">إلى الأبد 🤍</h1>
+            <div class="glass-card">
+                <p class="subtitle-cinematic" style="margin-bottom: 0;">
+                    «أنتِ لستِ مجرد حكاية... أنتِ العمر بأكمله، والنبض الذي يمنح حياتي معناها الأول والأخير».
+                </p>
+            </div>
+            <button class="btn-pulse" onclick="nextStage(1)">إعادة الرحلة 🔄</button>
+        </div>
+
+    </div>
+
+    <script>
+        // أنيميشن النجوم والمجرات خلفية محاكية للفضاء
+        const canvas = document.getElementById('starsCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for (let i = 0; i < 120; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 0.5 + 0.1,
+                opacity: Math.random()
+            });
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                ctx.fillStyle = `rgba(255, 215, 0, ${star.opacity})`;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                star.y -= star.speed;
+                if (star.y < 0) {
+                    star.y = canvas.height;
+                    star.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(drawStars);
+        }
+        drawStars();
+
+        // التنقل السلس بين المراحل
+        function nextStage(stageNum) {
+            document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+            setTimeout(() => {
+                document.getElementById('stage' + stageNum).classList.add('active');
+            }, 200);
+        }
+
+        // العداد الحي
+        const startDate = new Date("2024-01-01T00:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = now - startDate;
+            if (diff > 0) {
+                document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000);
+            }
+        }, 1000);
+
+        // سر الشريط المنزلق
+        function checkSecret(val) {
+            const txt = document.getElementById("secretText");
+            if (val > 85) {
+                txt.innerText = "«أنتِ أجمل اختيار صَنعه قلبي على الإطلاق ✨»";
+            } else {
+                txt.innerText = "واصلتِ السحب لتكتشفي السر...";
+            }
+        }
+
+        // رسائل النجوم الخمس
+        const starMsgs = {
+            1: "نجمة عينيكِ تضيء أحلك لياليّ.",
+            2: "كل ثانية معكِ تساوي عمراً كاملاً.",
+            3: "أنتِ الملاذ والوطن والدفء.",
+            4: "حبكِ هو السر الوحيد الذي أتباهى به.",
+            5: "دمتِ لي نبضاً لا يتوقف أبداً."
+        };
+        function openStar(num) {
+            document.getElementById("starMsg").innerText = starMsgs[num];
+        }
+    </script>
+</body>
+</html>
+
