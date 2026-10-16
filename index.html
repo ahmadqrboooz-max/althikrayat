@@ -1,487 +1,826 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>نبض الذكريات | رحلة من القلب</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070b1c">
+  <meta name="description" content="نبض الذكريات — رحلة صغيرة تحمل مشاعر كبيرة">
+  <title>نبض الذكريات ❤️</title>
 
-:root {
-  --gold: #f4d59b;
-  --white: #fff8ed;
-  --dark: #070914;
-}
-* { box-sizing: border-box; }
-html, body {
-  margin: 0; width: 100%; min-height: 100%;
-  background: var(--dark); color: var(--white);
-  font-family: Cairo, sans-serif;
-}
-body { overflow: hidden; }
-button { font: inherit; cursor: pointer; }
-button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 
-#stars {
-  position: fixed; inset: 0; pointer-events: none;
-  z-index: 5; overflow: hidden;
-}
-.star {
-  position: absolute; width: 2px; height: 2px;
-  border-radius: 50%; background: white;
-  box-shadow: 0 0 10px white;
-  animation: twinkle 3s infinite alternate;
-}
-@keyframes twinkle {
-  from { opacity: .15; transform: scale(.6); }
-  to { opacity: 1; transform: scale(1.6); }
-}
-.scene {
-  position: fixed; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  padding: 85px 22px 65px;
-  text-align: center; overflow-y: auto;
-  opacity: 0; visibility: hidden;
-  transform: scale(1.06);
-  transition: opacity 1s, transform 1.2s, visibility 1s;
-  background: #080b1b;
-}
-.scene.active {
-  opacity: 1; visibility: visible; transform: scale(1);
-}
-.scene::before {
-  content: ""; position: absolute; inset: 0; z-index: 0;
-  background-size: cover; background-position: center;
-  animation: zoom 22s ease-in-out infinite alternate;
-}
-.scene::after {
-  content: ""; position: absolute; inset: 0; z-index: 0;
-  background: linear-gradient(180deg, #06081635, #050711df);
-}
-@keyframes zoom {
-  from { transform: scale(1); }
-  to { transform: scale(1.12); }
-}
-.s0::before {
-  background:
-    radial-gradient(circle at 50% 30%, #b7c6e744, transparent 20%),
-    linear-gradient(#10182f, #24314a 45%, #080b18);
-}
-.s1::before {
-  background-image: url("https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1800&q=85");
-}
-.s2::before {
-  background-image: url("https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1800&q=85");
-}
-.s3::before {
-  background-image: url("https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1800&q=85");
-}
-.s4::before {
-  background-image: url("https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1800&q=85");
-}
-.s5::before {
-  background-image: url("https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1800&q=85");
-}
-.s6::before {
-  background: radial-gradient(ellipse, #ad8b5940, transparent 45%),
-              linear-gradient(145deg, #1d1728, #060812);
-}
-.content {
-  position: relative; z-index: 2;
-  width: min(760px, 100%); margin: auto;
-}
-.eyebrow {
-  color: var(--gold); font-size: 12px;
-  letter-spacing: 3px; margin-bottom: 22px;
-}
-h1, h2 { margin: 0 0 20px; line-height: 1.4; }
-h1 { font-size: clamp(42px, 10vw, 90px); font-weight: 800; }
-h1 span, h2 span {
-  display: block; color: var(--gold);
-  font-family: Amiri, serif; font-weight: 400;
-}
-h2 { font-size: clamp(30px, 7vw, 58px); }
-p {
-  color: #e2dfeb; line-height: 2.1;
-  font-size: clamp(14px, 3.5vw, 18px);
-}
-.gold {
-  min-height: 54px; padding: 13px 28px;
-  border: 1px solid #fff0c5;
-  border-radius: 40px;
-  background: linear-gradient(135deg, #fff0c5, #c29a5a);
-  color: #17111a; font-weight: 800;
-  box-shadow: 0 0 35px #e7c78c30;
-  transition: transform .3s, box-shadow .3s;
-}
-.gold:hover { transform: translateY(-3px); box-shadow: 0 0 45px #e7c78c60; }
-.hint { color: #b8b7c7; font-size: 12px; margin-top: 18px; }
-.top {
-  position: fixed; z-index: 10; top: 18px;
-  right: 20px; left: 20px;
-  display: flex; justify-content: space-between; align-items: center;
-}
-.brand { font-size: 13px; font-weight: 800; }
-.brand span { color: var(--gold); }
-.sound {
-  border: 1px solid #ffffff44; border-radius: 30px;
-  padding: 9px 14px; background: #080a19aa; color: white;
-}
-.progress {
-  position: fixed; z-index: 10; bottom: 20px;
-  left: 50%; transform: translateX(-50%);
-  display: flex; gap: 8px;
-}
-.progress button {
-  border: 0; width: 6px; height: 6px;
-  border-radius: 10px; padding: 0;
-  background: #ffffff66; transition: .3s;
-}
-.progress button.active { width: 25px; background: var(--gold); }
-.panel {
-  padding: 24px; margin: 25px auto;
-  width: min(600px, 100%);
-  background: #ffffff0c; border: 1px solid #ffffff26;
-  border-radius: 25px; backdrop-filter: blur(14px);
-}
-.counter {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 5px; direction: ltr;
-}
-.counter strong { display: block; font-size: clamp(23px, 6vw, 42px); }
-.counter span { font-size: 11px; color: #c8c5d5; }
-.memories {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 10px; margin: 25px 0;
-}
-.memory {
-  min-height: 130px; padding: 15px 8px;
-  color: white; border: 1px solid #ffffff38;
-  border-radius: 18px; background: #ffffff0d;
-  transition: .3s;
-}
-.memory:hover { background: #e7c78c25; transform: translateY(-5px); }
-.memory b { display: block; color: var(--gold); margin-bottom: 8px; }
-.stars {
-  display: flex; justify-content: center;
-  flex-wrap: wrap; gap: 10px; margin: 28px 0;
-}
-.starbtn {
-  border: 0; background: transparent; color: #f4d59b;
-  font-size: clamp(42px, 10vw, 65px);
-  filter: drop-shadow(0 0 8px #f4d59b40);
-  transition: .35s;
-}
-.starbtn:hover, .starbtn.open {
-  transform: scale(1.2) rotate(12deg);
-  filter: drop-shadow(0 0 18px #f4d59b);
-}
-.message {
-  min-height: 85px; line-height: 2;
-  display: flex; align-items: center; justify-content: center;
-}
-.letter {
-  width: min(450px, 100%); padding: 28px 20px;
-  border-radius: 22px; border: 1px solid #e5c78a77;
-  background: linear-gradient(140deg, #f5dfb522, #ffffff08);
-  color: white; font-size: 18px; line-height: 2;
-}
-.seal { font-size: 40px; color: var(--gold); }
-.modal {
-  position: fixed; z-index: 30; inset: 0;
-  display: none; align-items: center; justify-content: center;
-  padding: 20px; background: #02030bdc;
-}
-.modal.show { display: flex; }
-.modalbox {
-  width: min(520px, 100%); padding: 30px;
-  border-radius: 25px; border: 1px solid #e8cf9a66;
-  background: #111426; text-align: center;
-}
-.modalbox p { white-space: pre-line; }
-.close {
-  border: 1px solid #e8cf9a88; color: var(--gold);
-  background: transparent; padding: 10px 20px; border-radius: 30px;
-}
-@media(max-width:480px) {
-  .memories { grid-template-columns: 1fr; }
-  .memory { min-height: 85px; }
-  .scene { padding-top: 80px; padding-bottom: 70px; }
-}
-@media(prefers-reduced-motion:reduce) {
-  *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
-}
-</style>
-</head>
-<body>
-
-<div id="stars"></div>
-
-<header class="top">
-  <div class="brand">نبض <span>الذكريات</span></div>
-  <button class="sound" id="sound">♫ الصوت مغلق</button>
-</header>
-
-<section class="scene s0 active" data-scene="0">
-  <div class="content">
-    <div class="eyebrow">A STORY MADE FOR YOU</div>
-    <h1>مو مجرد هدية<span>حكاية إلك لحالك</span></h1>
-    <p>في أشياء ما بتنحكى بكلمتين… وفي مشاعر بتستاهل رحلة كاملة، من أول لحظة لآخر نبضة.</p>
-    <button class="gold" id="start">ابدئي الرحلة ←</button>
-    <div class="hint">خدي نفس عميق… وخلي الحكاية تبدأ</div>
-  </div>
-</section>
-
-<section class="scene s1" data-scene="1">
-  <div class="content">
-    <div class="eyebrow">CHAPTER I · OUR TIME</div>
-    <h2>من أول لحظة<span>بلّشت حكايتنا</span></h2>
-    <p>يمكن مرّ الوقت بسرعة، بس في لحظات بتضل عايشة فينا مهما مرّت الأيام.</p>
-    <div class="panel">
-      <div class="eyebrow">الوقت اللي جمعنا</div>
-      <div class="counter">
-        <div><strong id="days">000</strong><span>يوم</span></div>
-        <div><strong id="hours">00</strong><span>ساعة</span></div>
-        <div><strong id="minutes">00</strong><span>دقيقة</span></div>
-        <div><strong id="seconds">00</strong><span>ثانية</span></div>
-      </div>
-    </div>
-    <button class="gold next" data-next="2">خلينا نتذكر ←</button>
-  </div>
-</section>
-
-<section class="scene s2" data-scene="2">
-  <div class="content">
-    <div class="eyebrow">CHAPTER II · MEMORIES</div>
-    <h2>بعض التفاصيل<span>بتعيش بالقلب</span></h2>
-    <p>اضغطي على كل ذكرى… يمكن كلمة صغيرة ترجعلك شعور كبير.</p>
-    <div class="memories">
-      <button class="memory" data-memory="0"><b>01 · البداية</b>أول الحكاية</button>
-      <button class="memory" data-memory="1"><b>02 · التفاصيل</b>أشياء ما بتنتسى</button>
-      <button class="memory" data-memory="2"><b>03 · الشعور</b>شيء ما بينوصف</button>
-    </div>
-    <button class="gold next" data-next="3">اكتشفي أسرار النجوم ←</button>
-  </div>
-</section>
-
-<section class="scene s3" data-scene="3">
-  <div class="content">
-    <div class="eyebrow">CHAPTER III · FIVE STARS</div>
-    <h2>خمس نجوم<span>وكل وحدة إلها سر</span></h2>
-    <p>المسي كل نجمة، واكتشفي الرسالة المخباية فيها.</p>
-    <div class="stars">
-      <button class="starbtn" data-star="0">✦</button>
-      <button class="starbtn" data-star="1">✦</button>
-      <button class="starbtn" data-star="2">✦</button>
-      <button class="starbtn" data-star="3">✦</button>
-      <button class="starbtn" data-star="4">✦</button>
-    </div>
-    <div class="panel message" id="message">اختاري نجمة لتظهر رسالتها هون ♡</div>
-    <button class="gold next" data-next="4">في رسالة إلك ←</button>
-  </div>
-</section>
-
-<section class="scene s4" data-scene="4">
-  <div class="content">
-    <div class="eyebrow">CHAPTER IV · A SECRET</div>
-    <h2>رسالة من القلب<span>إلك وحدك</span></h2>
-    <p>في كلام ما بينقال قدام الكل… في كلام لازم يوصلك بلحظة هادية.</p>
-    <button class="letter" id="openLetter">
-      <div class="seal">♡</div>
-      <div>إلى الشخص اللي غيّر شكل الأيام…</div>
-      <small>اضغطي لفتح الرسالة</small>
-    </button>
-    <p><button class="gold next" data-next="5">كمّلي الحكاية ←</button></p>
-  </div>
-</section>
-
-<section class="scene s5" data-scene="5">
-  <div class="content">
-    <div class="eyebrow">CHAPTER V · THE FEELING</div>
-    <h2>أجمل الهدايا<span>هي اللي بتخلّينا نحس</span></h2>
-    <p>مو قيمة الهدية بحجمها… قيمتها بالشخص اللي فكّر فيك، واختار كل تفصيل وهو عم يتخيّل ابتسامتك.</p>
-    <div class="panel">
-      <div class="seal">♡</div>
-      <p>يمكن هاللحظة تخلص… بس الشعور الحلو اللي تركته، ممكن يضل معك وقت طويل.</p>
-    </div>
-    <button class="gold next" data-next="6">آخر مفاجأة ←</button>
-  </div>
-</section>
-
-<section class="scene s6" data-scene="6">
-  <div class="content">
-    <div class="eyebrow">NABD AL THIKRAYAT</div>
-    <h2>بعض الناس<span>هم أجمل ما حدث لنا</span></h2>
-    <p>ولو رجع فينا الوقت من أوله، يمكن نختار نفس اللحظة… ونفس الشخص… ونفس الحكاية.</p>
-    <div class="seal">♡</div>
-    <p>انتهت الرحلة… بس الذكرى الحلوة بعدها عم تكبر.</p>
-    <button class="gold" id="restart">↻ عيشوا الرحلة من جديد</button>
-  </div>
-</section>
-
-<nav class="progress" id="progress">
-  <button class="active" data-goto="0" aria-label="البداية"></button>
-  <button data-goto="1" aria-label="الوقت"></button>
-  <button data-goto="2" aria-label="الذكريات"></button>
-  <button data-goto="3" aria-label="النجوم"></button>
-  <button data-goto="4" aria-label="الرسالة"></button>
-  <button data-goto="5" aria-label="المشاعر"></button>
-  <button data-goto="6" aria-label="النهاية"></button>
-</nav>
-
-<div class="modal" id="modal">
-  <div class="modalbox">
-    <div class="seal">♡</div>
-    <h2 id="modalTitle">رسالة من القلب</h2>
-    <p id="modalText"></p>
-    <button class="close" id="close">إغلاق الرسالة</button>
-  </div>
-</div>
-
-<script>
-/* عدّل التاريخ والرسائل من هون */
-const START_DATE = "2025-09-25T00:00:00";
-const STAR_MESSAGES = [
-  "وجودك مو تفصيل عابر بحياتي… وجودك فرق بين يوم عادي ويوم بستناه من قلبي.",
-  "أحب التفاصيل الصغيرة اللي يمكن ما ينتبه إلها حدا، بس أنا بتضل بذاكرتي لأنها منك.",
-  "إذا عندي أمنية، فهي إن الأيام الجاية تحمل إلنا راحة وفرح أكثر من اللي مضى.",
-  "مو لازم تكون كل الأيام مثالية… المهم نضل نلاقي سبب نبتسم فيه ونحكي من قلبنا.",
-  "بين كل الناس والطرق، في أشخاص بيصير وجودهم بحد ذاته مكان آمن… وإنتِ منهم."
-];
-const MEMORY_MESSAGES = [
-  "كل حكاية حلوة إلها لحظة بداية… وأحياناً ما منعرف وقتها قديش رح تصير غالية.",
-  "أحياناً أبسط التفاصيل بتصير أغلى الذكريات: كلمة، ضحكة، أو اهتمام صغير إجا بالوقت الصح.",
-  "في ذكريات ما بدها شرح… مجرد ما تمرّ ببالنا بيرجع معها شعور حلو ما بينوصف."
-];
-const LETTER =
-"إلى الشخص اللي جعل للأيام طعماً مختلفاً…\n\nيمكن ما بعرف دائماً كيف أشرح اللي بقلبي، بس بعرف إن بعض الأشخاص بيتركوا أثر ما بيشبه حدا. وجودك وتفاصيلك واللحظات اللي جمعتنا إلها مكان خاص عندي.\n\nبتمنى تضل الأيام الجاية ألطف علينا، وتكون مليانة أشياء حلوة وذكريات نرجع لها كل ما احتجنا نبتسم.\n\nإنتِ مو شخص عابر بحكايتي. ♡";
-
-const scenes = [...document.querySelectorAll(".scene")];
-let current = 0;
-let locked = false;
-
-function goTo(index) {
-  if (index < 0 || index >= scenes.length || index === current || locked) return;
-  locked = true;
-  scenes[current].classList.remove("active");
-  current = index;
-  scenes[current].classList.add("active");
-  document.querySelectorAll("#progress button").forEach((b, i) => {
-    b.classList.toggle("active", i === current);
-  });
-  setTimeout(() => locked = false, 950);
-  if (current === 1) updateCounter();
-}
-
-document.getElementById("start").addEventListener("click", () => goTo(1));
-document.querySelectorAll("[data-next]").forEach(button => {
-  button.addEventListener("click", () => goTo(Number(button.dataset.next)));
-});
-document.querySelectorAll("[data-goto]").forEach(button => {
-  button.addEventListener("click", () => goTo(Number(button.dataset.goto)));
-});
-document.getElementById("restart").addEventListener("click", () => {
-  if (current !== 0) goTo(0);
-});
-
-function updateCounter() {
-  const diff = Math.max(0, Date.now() - new Date(START_DATE).getTime());
-  const seconds = Math.floor(diff / 1000);
-  document.getElementById("days").textContent = Math.floor(seconds / 86400);
-  document.getElementById("hours").textContent = String(Math.floor(seconds % 86400 / 3600)).padStart(2, "0");
-  document.getElementById("minutes").textContent = String(Math.floor(seconds % 3600 / 60)).padStart(2, "0");
-  document.getElementById("seconds").textContent = String(seconds % 60).padStart(2, "0");
-}
-updateCounter();
-setInterval(updateCounter, 1000);
-
-document.querySelectorAll("[data-star]").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll("[data-star]").forEach(b => b.classList.remove("open"));
-    button.classList.add("open");
-    document.getElementById("message").textContent = STAR_MESSAGES[Number(button.dataset.star)];
-  });
-});
-
-document.querySelectorAll("[data-memory]").forEach(button => {
-  button.addEventListener("click", () => {
-    const i = Number(button.dataset.memory);
-    showModal(["البداية", "التفاصيل", "الشعور"][i], MEMORY_MESSAGES[i]);
-  });
-});
-
-document.getElementById("openLetter").addEventListener("click", () => {
-  showModal("رسالة من القلب", LETTER);
-});
-function showModal(title, text) {
-  document.getElementById("modalTitle").textContent = title;
-  document.getElementById("modalText").textContent = text;
-  document.getElementById("modal").classList.add("show");
-}
-function closeModal() {
-  document.getElementById("modal").classList.remove("show");
-}
-document.getElementById("close").addEventListener("click", closeModal);
-document.getElementById("modal").addEventListener("click", event => {
-  if (event.target.id === "modal") closeModal();
-});
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") closeModal();
-  if (event.key === "ArrowLeft") goTo(Math.min(current + 1, 6));
-  if (event.key === "ArrowRight") goTo(Math.max(current - 1, 0));
-});
-
-/* إنشاء النجوم المتحركة */
-const starField = document.getElementById("stars");
-for (let i = 0; i < 100; i++) {
-  const star = document.createElement("i");
-  star.className = "star";
-  star.style.left = Math.random() * 100 + "%";
-  star.style.top = Math.random() * 100 + "%";
-  star.style.animationDelay = Math.random() * 4 + "s";
-  star.style.opacity = Math.random();
-  starField.appendChild(star);
-}
-
-/* صوت نغمي بسيط يعمل بعد ضغط المستخدم */
-let audioContext = null;
-let soundOn = false;
-let oscillators = [];
-document.getElementById("sound").addEventListener("click", async function() {
-  if (!soundOn) {
-    try {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      await audioContext.resume();
-      const master = audioContext.createGain();
-      master.gain.value = 0.012;
-      master.connect(audioContext.destination);
-      [174.61, 261.63, 349.23].forEach((frequency, i) => {
-        const oscillator = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        oscillator.type = "sine";
-        oscillator.frequency.value = frequency;
-        gain.gain.value = [1, 0.45, 0.2][i];
-        oscillator.connect(gain);
-        gain.connect(master);
-        oscillator.start();
-        oscillators.push(oscillator);
-      });
-      soundOn = true;
-      this.textContent = "♫ الصوت يعمل";
-    } catch (error) {
-      this.textContent = "الصوت غير متاح";
+  <style>
+    :root {
+      --gold: #e7c477;
+      --gold-light: #ffe9b0;
+      --navy: #070b1c;
+      --navy-light: #111a35;
+      --white: #fffaf0;
+      --muted: #c0c4d7;
+      --glass: rgba(255, 255, 255, 0.055);
+      --border: rgba(231, 196, 119, 0.25);
     }
-  } else {
-    oscillators.forEach(oscillator => {
-      try { oscillator.stop(); } catch (error) {}
-    });
-    oscillators = [];
-    if (audioContext) audioContext.close();
-    audioContext = null;
-    soundOn = false;
-    this.textContent = "♫ الصوت مغلق";
-  }
-});
-</script>
-</body>
-</html>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--navy);
+      color: var(--white);
+      font-family: "Cairo", sans-serif;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    button:focus-visible,
+    audio:focus-visible {
+      outline: 2px solid var(--gold-light);
+      outline-offset: 5px;
+    }
+
+    .stars-background {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 50% 0%, #18264a 0%, transparent 55%),
+        radial-gradient(ellipse at 15% 85%, #211631 0%, transparent 50%),
+        linear-gradient(180deg, #080c20, #050711);
+    }
+
+    .stars-background::before,
+    .stars-background::after {
+      content: "";
+      position: absolute;
+      inset: -50%;
+      background-image:
+        radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 70% 20%, #e7c477 50%, transparent 100%),
+        radial-gradient(2px 2px at 80% 65%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 40% 75%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 60% 45%, #e7c477 50%, transparent 100%);
+      background-size: 270px 270px;
+      opacity: 0.55;
+      animation: starsMove 80s linear infinite;
+    }
+
+    .stars-background::after {
+      background-size: 190px 190px;
+      opacity: 0.28;
+      animation-duration: 110s;
+      animation-direction: reverse;
+    }
+
+    @keyframes starsMove {
+      from { transform: translateY(0); }
+      to { transform: translateY(270px); }
+    }
+
+    .ambient-glow {
+      position: fixed;
+      z-index: -2;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: rgba(151, 109, 202, 0.09);
+      filter: blur(80px);
+      top: 25%;
+      left: -120px;
+      pointer-events: none;
+    }
+
+    .top-bar {
+      position: fixed;
+      z-index: 20;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 17px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: linear-gradient(
+        180deg,
+        rgba(5, 7, 17, 0.8),
+        rgba(5, 7, 17, 0)
+      );
+    }
+
+    .brand {
+      color: var(--gold);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .sound-button {
+      border: 1px solid var(--border);
+      color: var(--gold-light);
+      background: rgba(10, 14, 32, 0.8);
+      border-radius: 30px;
+      padding: 8px 13px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .sound-button:hover {
+      background: rgba(231, 196, 119, 0.12);
+    }
+
+    .progress {
+      position: fixed;
+      z-index: 25;
+      top: 75px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      direction: ltr;
+    }
+
+    .progress-dot {
+      width: 7px;
+      height: 7px;
+      border: 1px solid rgba(231, 196, 119, 0.55);
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      transition: 0.3s;
+      padding: 0;
+    }
+
+    .progress-dot.active {
+      width: 24px;
+      border-radius: 20px;
+      background: var(--gold);
+      box-shadow: 0 0 12px rgba(231, 196, 119, 0.5);
+    }
+
+    .scene {
+      display: none;
+      position: relative;
+      min-height: 100svh;
+      width: 100%;
+      padding: 120px 20px 55px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      isolation: isolate;
+    }
+
+    .scene.active {
+      display: flex;
+      animation: sceneAppear 1s ease both;
+    }
+
+    @keyframes sceneAppear {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .scene-inner {
+      width: 100%;
+      max-width: 720px;
+      margin: auto;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-bottom: 18px;
+      font-weight: 600;
+    }
+
+    .main-title {
+      font-family: "Amiri", serif;
+      font-size: clamp(37px, 8vw, 65px);
+      line-height: 1.5;
+      font-weight: 700;
+      color: var(--gold-light);
+      text-shadow: 0 0 35px rgba(231, 196, 119, 0.16);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: clamp(14px, 3.5vw, 17px);
+      line-height: 2.1;
+      margin: 15px auto 0;
+      max-width: 530px;
+      white-space: pre-line;
+    }
+
+    .ornament {
+      width: 100px;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--gold),
+        transparent
+      );
+      margin: 25px auto;
+    }
+
+    .heart {
+      color: var(--gold);
+      font-size: 33px;
+      margin: 18px 0;
+      display: inline-block;
+      animation: heartbeat 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 15px rgba(231, 196, 119, 0.35));
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      12% { transform: scale(1.12); }
+      24% { transform: scale(1); }
+      36% { transform: scale(1.08); }
+      48% { transform: scale(1); }
+    }
+
+    .primary-button {
+      position: relative;
+      overflow: hidden;
+      margin-top: 30px;
+      min-width: 180px;
+      padding: 14px 27px;
+      border: 1px solid var(--gold);
+      border-radius: 40px;
+      background: linear-gradient(135deg, #f1d99a, #c69b48);
+      color: #17101a;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0 30px rgba(231, 196, 119, 0.14);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 38px rgba(231, 196, 119, 0.28);
+    }
+
+    .primary-button:active {
+      transform: scale(0.98);
+    }
+
+    .secondary-note {
+      margin-top: 17px;
+      color: #8f95b1;
+      font-size: 11px;
+    }
+
+    .glass-card {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(25px, 6vw, 43px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.065),
+          rgba(255, 255, 255, 0.015)
+        );
+      box-shadow:
+        0 20px 80px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+    }
+
+    .glass-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 20%;
+      right: 20%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--gold),
+        transparent
+      );
+      opacity: 0.7;
+    }
+
+    .section-number {
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 3px;
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      font-family: "Amiri", serif;
+      color: var(--gold-light);
+      font-size: clamp(30px, 7vw, 45px);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .personal-message {
+      color: #fffaf0;
+      font-family: "Amiri", serif;
+      font-size: clamp(21px, 5vw, 29px);
+      line-height: 2.1;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+    }
+
+    .message-signature {
+      color: var(--gold);
+      margin-top: 22px;
+      font-size: 14px;
+    }
+
+    .photo-frame {
+      position: relative;
+      margin: 22px auto 0;
+      width: 100%;
+      max-width: 430px;
+      padding: 8px;
+      border: 1px solid rgba(231, 196, 119, 0.55);
+      border-radius: 19px;
+      background: rgba(255, 255, 255, 0.025);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.28);
+    }
+
+    .memory-photo {
+      display: block;
+      width: 100%;
+      max-height: 470px;
+      min-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #12182d;
+    }
+
+    .photo-caption {
+      font-family: "Amiri", serif;
+      color: var(--gold-light);
+      font-size: clamp(21px, 5vw, 28px);
+      line-height: 1.9;
+      margin-top: 24px;
+      white-space: pre-line;
+    }
+
+    .photo-subcaption {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.9;
+      margin-top: 7px;
+    }
+
+    .music-disc {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 110px;
+      height: 110px;
+      margin: 24px auto;
+      border-radius: 50%;
+      border: 1px solid rgba(231, 196, 119, 0.55);
+      background:
+        radial-gradient(circle, #f2d99b 0 5%, #493b34 6% 10%,
+        #10172c 11% 20%, #1d2946 21% 35%, #0a1021 36% 100%);
+      box-shadow: 0 0 40px rgba(231, 196, 119, 0.12);
+      font-size: 25px;
+      color: var(--gold-light);
+    }
+
+    .song-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+    }
+
+    .song-description {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.9;
+      white-space: pre-line;
+    }
+
+    .audio-container {
+      margin: 24px auto 0;
+      max-width: 460px;
+      width: 100%;
+    }
+
+    audio {
+      width: 100%;
+      height: 48px;
+      border-radius: 30px;
+    }
+
+    .audio-help {
+      margin-top: 10px;
+      font-size: 11px;
+      line-height: 1.8;
+      color: #9ba2be;
+    }
+
+    .counter-heading {
+      margin-top: 38px;
+      font-family: "Amiri", serif;
+      font-size: 25px;
+      color: var(--gold-light);
+    }
+
+    .counter-intro {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .counter-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 22px;
+      direction: rtl;
+    }
+
+    .counter-box {
+      padding: 17px 5px;
+      border-radius: 15px;
+      border: 1px solid rgba(231, 196, 119, 0.22);
+      background: rgba(7, 11, 28, 0.55);
+    }
+
+    .counter-value {
+      color: var(--gold-light);
+      font-size: clamp(22px, 5vw, 34px);
+      font-weight: 800;
+      line-height: 1.4;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .counter-label {
+      color: #aeb4ca;
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .counter-footer {
+      color: var(--gold);
+      font-size: 13px;
+      margin-top: 22px;
+      line-height: 2;
+    }
+
+    .footer-brand {
+      text-align: center;
+      color: #858ba6;
+      font-size: 11px;
+      margin-top: 30px;
+      letter-spacing: 1px;
+    }
+
+    .footer-brand span {
+      color: var(--gold);
+    }
+
+    .navigation-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 25px;
+    }
+
+    .back-button {
+      padding: 12px 23px;
+      border-radius: 30px;
+      border: 1px solid rgba(231, 196, 119, 0.35);
+      color: var(--gold-light);
+      background: rgba(255, 255, 255, 0.025);
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .back-button:hover {
+      background: rgba(231, 196, 119, 0.1);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 480px) {
+      .top-bar {
+        padding: 13px 15px;
+      }
+
+      .brand {
+        font-size: 12px;
+      }
+
+      .progress {
+        top: 65px;
+      }
+
+      .scene {
+        padding: 105px 15px 35px;
+      }
+
+      .glass-card {
+        padding: 25px 18px;
+        border-radius: 20px;
+      }
+
+      .counter-grid {
+        gap: 6px;
+      }
+
+      .counter-box {
+        padding: 13px 3px;
+      }
+
+      .counter-label {
+        font-size: 10px;
+      }
+
+      .primary-button {
+        min-width: 165px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stars-background" aria-hidden="true"></div>
+  <div class="ambient-glow" aria-hidden="true"></div>
+
+  <header class="top-bar">
+    <div class="brand">نبض الذكريات <span aria-hidden="true">♡</span></div>
+    <button
+      class="sound-button"
+      id="soundButton"
+      type="button"
+      aria-pressed="false"
+    >
+      ♫ الصوت المحيطي: مغلق
+    </button>
+  </header>
+
+  <nav class="progress" aria-label="مراحل الهدية">
+    <button class="progress-dot active" type="button" data-go="0" aria-label="البداية" aria-current="step"></button>
+    <button class="progress-dot" type="button" data-go="1" aria-label="الرسالة"></button>
+    <button class="progress-dot" type="button" data-go="2" aria-label="الصورة"></button>
+    <button class="progress-dot" type="button" data-go="3" aria-label="الأغنية والعداد"></button>
+  </nav>
+
+  <main>
+    <!-- شاشة البداية -->
+    <section class="scene active" id="scene0">
+      <div class="scene-inner">
+        <p class="eyebrow">A MEMORY MADE FOR YOU</p>
+
+        <h1 class="main-title">
+          في أشياء ما بتنحكى...
+          <br>
+          بتنحس بالقلب
+        </h1>
+
+        <div class="heart" aria-hidden="true">♡</div>
+
+        <div class="ornament"></div>
+
+        <p class="subtitle">
+          مو مجرد هدية...
+          <br>
+          هاي لحظات ومشاعر انجمعت إلك بمكان واحد.
+          <br>
+          خذ نفس، وخلّي قلبك يعيش الحكاية.
+        </p>
+
+        <button class="primary-button" type="button" data-next>
+          ابدأ رحلتك ♡
+        </button>
+
+        <p class="secondary-note">جهّز قلبك للحظات خاصة إلك</p>
+      </div>
+    </section>
+
+    <!-- المرحلة الأولى: الرسالة الشخصية -->
+    <section class="scene" id="scene1">
+      <div class="scene-inner">
+        <p class="eyebrow">A MESSAGE FROM THE HEART</p>
+
+        <div class="glass-card">
+          <p class="section-number">01 — رسالة إلك</p>
+
+          <h2 class="section-title">اقرأها بقلبك</h2>
+
+          <div class="ornament"></div>
+
+          <p class="personal-message" id="personalMessage">
+            في كلام يمكن ما نعرف نقوله كل يوم...
+            بس هالمرة حبيت أخليه إلك، حتى تقدر ترجعله بأي وقت.
+          </p>
+
+          <div class="message-signature" id="messageSignature">
+            إلك، بكل الحب ♡
+          </div>
+        </div>
+
+        <div class="navigation-row">
+          <button class="back-button" type="button" data-prev>
+            رجوع
+          </button>
+
+          <button class="primary-button" type="button" data-next>
+            كمّل الحكاية ←
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- المرحلة الثانية: صورة ورسالة قصيرة -->
+    <section class="scene" id="scene2">
+      <div class="scene-inner">
+        <p class="eyebrow">A MOMENT TO REMEMBER</p>
+
+        <div class="glass-card">
+          <p class="section-number">02 — ذكرى إلنا</p>
+
+          <h2 class="section-title">صورة بتحكي حكاية</h2>
+
+          <div class="photo-frame">
+            <img
+              class="memory-photo"
+              id="memoryPhoto"
+              src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&amp;fit=crop&amp;w=1000&amp;q=85"
+              alt="صورة تذكارية"
+              loading="lazy"
+            >
+          </div>
+
+          <p class="photo-caption" id="photoCaption">
+            بعض اللحظات بتخلص...
+            بس إحساسها بيضل معنا.
+          </p>
+
+          <p class="photo-subcaption" id="photoSubcaption">
+            ذكرى صغيرة، ومكان كبير بالقلب.
+          </p>
+        </div>
+
+        <div class="navigation-row">
+          <button class="back-button" type="button" data-prev>
+            رجوع
+          </button>
+
+          <button class="primary-button" type="button" data-next>
+            للّحظة الأخيرة ♡
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- المرحلة الثالثة: الأغنية والعداد -->
+    <section class="scene" id="scene3">
+      <div class="scene-inner">
+        <p class="eyebrow">OUR TIME • OUR SONG</p>
+
+        <div class="glass-card">
+          <p class="section-number">03 — لحنتنا ووقتنا</p>
+
+          <h2 class="section-title">إلنا حكاية ما بيوقف وقتها</h2>
+
+          <div class="music-disc" aria-hidden="true">♫</div>
+
+          <h3 class="song-title" id="songTitle">أغنيتنا الخاصة</h3>
+
+          <p class="song-description" id="songDescription">
+            في أغانٍ بتصير مرتبطة بشخص...
+            ومن بعدها كل ما نسمعها، بنتذكره.
+          </p>
+
+          <div class="audio-container" id="audioContainer">
+            <audio id="songPlayer" controls preload="none">
+              <source id="songSource" src="" type="audio/mpeg">
+              المتصفح لا يدعم تشغيل الصوت.
+            </audio>
+
+            <p class="audio-help" id="audioHelp">
+              أضف رابط ملف الأغنية في إعدادات الموقع حتى يتم تشغيلها.
+            </p>
+          </div>
+
+          <div class="ornament"></div>
+
+          <h3 class="counter-heading" id="counterHeading">
+            من يوم بلّشت حكايتنا
+          </h3>
+
+          <p class="counter-intro">
+            كل ثانية مرّت صارت جزء من حكايتنا
+          </p>
+
+          <div class="counter-grid" aria-label="مدة العلاقة">
+            <div class="counter-box">
+              <div class="counter-value" id="days">0</div>
+              <div class="counter-label">يوم</div>
+            </div>
+
+            <div class="counter-box">
+              <div class="counter-value" id="hours">00</div>
+              <div class="counter-label">ساعة</div>
+            </div>
+
+            <div class="counter-box">
+              <div class="counter-value" id="minutes">00</div>
+              <div class="counter-label">دقيقة</div>
+            </div>
+
+            <div class="counter-box">
+              <div class="counter-value" id="seconds">00</div>
+              <div class="counter-label">ثانية</div>
+            </div>
+          </div>
+
+          <p class="counter-footer" id="counterFooter">
+            وأجمل الذكريات لسه بالطريق ♡
+          </p>
+        </div>
+
+        <div class="navigation-row">
+          <button class="back-button" type="button" data-prev>
+            رجوع
+          </button>
+        </div>
+
+        <div class="footer-brand">
+          صُنعت بحب من <span>نبض الذكريات</span> ♡
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* ==========================================
+       إعدادات الهدية — عدّل هذه القيم لكل زبون
+       ========================================== */
+
+    // تاريخ بداية العلاقة.
+    // الصيغة: السنة-الشهر-اليوم T الساعة:الدقيقة:الثانية
+    // مثال: 25 سبتمبر 2025
+    const START_DATE = "2025-09-25T00:00:00";
+
+    // الرسالة الشخصية في المرحلة الأولى
+    const CUSTOMER_MESSAGE = `في كلام يمكن ما نعرف نقوله كل يوم...
+بس هالمرة حبيت أخليه إلك، حتى تقدر ترجعله بأي وقت.
+
+وجودك بحياتي إله معنى خاص،
+وكل ذكرى حلوة بتجمعنا بتستاهل تضل عايشة بقلبي.`;
+
+    // التوقيع تحت الرسالة الأولى
+    const MESSAGE_SIGNATURE = "إلك، بكل الحب ♡";
+
+    // رابط الصورة في المرحلة الثانية
+    const PHOTO_URL =
+      "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1000&q=85
