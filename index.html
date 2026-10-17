@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -208,10 +207,17 @@ p {
   margin-top: 20px;
 }
 
+.photo-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  margin: 20px 0;
+}
+
 .photo-frame {
   width: 100%;
   max-width: 390px;
-  margin: 20px auto;
   padding: 7px;
   border: 1px solid #e7c47788;
   border-radius: 18px;
@@ -310,6 +316,20 @@ audio {
   font-size: 11px;
 }
 
+/* شاشة التحميل */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--gold);
+  font-size: 18px;
+}
+
 @media (max-width: 400px) {
   .card { padding: 23px 14px; }
   .counter { gap: 4px; }
@@ -327,6 +347,12 @@ audio {
 </head>
 
 <body>
+
+<div id="loader">
+  <div class="heart">♡</div>
+  <p>جاري تحميل نبض الذكريات...</p>
+</div>
+
 <div class="background"></div>
 
 <header class="top">
@@ -340,7 +366,7 @@ audio {
     <div class="content">
       <div class="eyebrow">A MEMORY MADE FOR YOU</div>
 
-      <h1>
+      <h1 id="welcomeTitle">
         في أشياء ما بتنحكى...
         <br>
         بتنحس بالقلب
@@ -349,7 +375,7 @@ audio {
       <div class="heart">♡</div>
       <div class="line"></div>
 
-      <p class="subtitle">
+      <p class="subtitle" id="welcomeSubtitle">
         مو مجرد هدية...
         <br>
         هاي لحظات ومشاعر انجمعت إلك بمكان واحد.
@@ -372,10 +398,10 @@ audio {
 
       <div class="card">
         <div class="number">01 — رسالة إلك</div>
-        <h2>اقرأها بقلبك</h2>
+        <h2 id="recipientHeader">إلك بقلب صادق</h2>
         <div class="line"></div>
 
-        <p class="message" id="personalMessage"></p>
+        <p class="message" id="personalMessage">جاري التحميل...</p>
         <p class="signature" id="signature"></p>
       </div>
 
@@ -398,9 +424,7 @@ audio {
         <div class="number">02 — ذكرى إلنا</div>
         <h2>صورة بتحكي حكاية</h2>
 
-        <div class="photo-frame">
-          <img id="memoryPhoto" alt="صورتنا وذكرياتنا">
-        </div>
+        <div id="photoGallery" class="photo-gallery"></div>
 
         <p class="photo-message" id="photoMessage"></p>
       </div>
@@ -426,8 +450,8 @@ audio {
 
         <div class="song-icon">♫</div>
 
-        <div class="song-title" id="songTitle"></div>
-        <p class="song-description" id="songDescription"></p>
+        <div class="song-title" id="songTitle">أغنيتنا الخاصة</div>
+        <p class="song-description" id="songDescription">في أغانٍ بتصير مرتبطة بشخص...</p>
 
         <audio id="songPlayer" controls preload="none"></audio>
         <p class="help" id="songHelp"></p>
@@ -469,42 +493,31 @@ audio {
 
 </main>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
 <script>
 /* ===================================
-   إعدادات الهدية: عدّلها لكل زبون
+   إعدادات Firebase وتحديد المجموعة
    =================================== */
+const firebaseConfig = {
+  projectId: "gift-qr-e2142"
+};
 
-const START_DATE = "2025-09-25T00:00:00";
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-const CUSTOMER_MESSAGE = `في كلام يمكن ما نعرف نقوله كل يوم...
-بس هالمرة حبيت أخليه إلك، حتى تقدر ترجعله بأي وقت.
+// القراءة من مجموعة الموقع الجديد حصراً
+const COLLECTION_NAME = 'althikrayat_gifts';
 
-وجودك بحياتي إله معنى خاص،
-وكل ذكرى حلوة بتجمعنا بتستاهل تضل عايشة بقلبي.`;
-
-const MESSAGE_SIGNATURE = "إلك، بكل الحب ♡";
-
-const PHOTO_URL =
-  "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1000&q=85";
-
-const PHOTO_MESSAGE = `بعض اللحظات بتخلص...
-بس إحساسها بيضل معنا.`;
-
-const SONG_TITLE = "أغنيتنا الخاصة";
-
-const SONG_DESCRIPTION = `في أغانٍ بتصير مرتبطة بشخص...
-ومن بعدها كل ما نسمعها، بنتذكره.`;
-
-const SONG_URL = "";
-
+let startTimestamp = Date.now();
 
 /* ===================================
-   التنقل: دالة مباشرة للأزرار
+   التنقل بين المراحل
    =================================== */
-
 function showScene(index) {
   const scenes = document.querySelectorAll(".scene");
-
   if (index < 0 || index >= scenes.length) return;
 
   scenes.forEach(function(scene, i) {
@@ -515,53 +528,93 @@ function showScene(index) {
   window.scrollTo(0, 0);
 }
 
-
 /* ===================================
-   تحميل محتوى الهدية
+   جلب البيانات من Firebase
    =================================== */
+async function loadGiftData() {
+  const loader = document.getElementById("loader");
+  const urlParams = new URLSearchParams(window.location.search);
+  const giftId = urlParams.get('id');
+  const shortCode = urlParams.get('c');
 
-document.getElementById("personalMessage").textContent =
-  CUSTOMER_MESSAGE;
+  if (!giftId && !shortCode) {
+    loader.style.display = 'none';
+    return; // إبقاء البيانات الافتراضية
+  }
 
-document.getElementById("signature").textContent =
-  MESSAGE_SIGNATURE;
+  try {
+    let docData = null;
 
-document.getElementById("photoMessage").textContent =
-  PHOTO_MESSAGE;
+    if (giftId) {
+      const doc = await db.collection(COLLECTION_NAME).doc(giftId).get();
+      if (doc.exists) docData = doc.data();
+    } else if (shortCode) {
+      const snap = await db.collection(COLLECTION_NAME).where('shortCode', '==', shortCode).limit(1).get();
+      if (!snap.empty) docData = snap.docs[0].data();
+    }
 
-document.getElementById("songTitle").textContent =
-  SONG_TITLE;
+    if (docData) {
+      // تعبئة الاسم
+      if (docData.recipientName || docData.recipient) {
+        const name = docData.recipientName || docData.recipient;
+        document.getElementById("recipientHeader").textContent = `إلى ${name} ♡`;
+        document.getElementById("welcomeTitle").innerHTML = `إلك يا ${name}...<br>في أشياء بتنحس بالقلب`;
+      }
 
-document.getElementById("songDescription").textContent =
-  SONG_DESCRIPTION;
+      // تعبئة الرسالة
+      if (docData.message) {
+        document.getElementById("personalMessage").textContent = docData.message;
+      }
 
-const photo = document.getElementById("memoryPhoto");
+      // تعبئة الصور
+      const photoGallery = document.getElementById("photoGallery");
+      photoGallery.innerHTML = "";
 
-photo.src = PHOTO_URL;
+      let images = [];
+      if (docData.imageUrls && Array.isArray(docData.imageUrls) && docData.imageUrls.length > 0) {
+        images = docData.imageUrls;
+      } else if (docData.imageUrl) {
+        images = [docData.imageUrl];
+      }
 
-photo.onerror = function() {
-  photo.style.display = "none";
-};
+      if (images.length > 0) {
+        images.forEach((imgUrl) => {
+          const frame = document.createElement("div");
+          frame.className = "photo-frame";
+          frame.innerHTML = `<img src="${imgUrl}" alt="ذكرى خاصة">`;
+          photoGallery.appendChild(frame);
+        });
+      } else {
+        photoGallery.style.display = "none";
+      }
 
-const player = document.getElementById("songPlayer");
-const songHelp = document.getElementById("songHelp");
+      // الصوت
+      const player = document.getElementById("songPlayer");
+      const songHelp = document.getElementById("songHelp");
 
-if (SONG_URL.trim() !== "") {
-  player.src = SONG_URL.trim();
-  songHelp.textContent = "اضغط تشغيل لسماع الأغنية ♡";
-} else {
-  player.style.display = "none";
-  songHelp.textContent =
-    "أضف رابط ملف MP3 مباشر لتشغيل الأغنية.";
+      if (docData.audioUrl && docData.audioUrl.trim() !== "") {
+        player.src = docData.audioUrl.trim();
+        songHelp.textContent = "اضغط تشغيل لسماع الرسالة الصوتية / الأغنية ♡";
+      } else {
+        player.style.display = "none";
+        songHelp.textContent = "";
+      }
+
+      // العداد بحسب تاريخ إنشاء الهدية
+      if (docData.createdAt && docData.createdAt.toDate) {
+        startTimestamp = docData.createdAt.toDate().getTime();
+      }
+    }
+  } catch (err) {
+    console.error("خطأ في جلب بيانات الهدية:", err);
+  } finally {
+    loader.style.display = 'none';
+  }
 }
 
-
 /* ===================================
-   عداد مدة العلاقة
+   عداد الوقت
    =================================== */
-
-const startTimestamp = new Date(START_DATE).getTime();
-
 function updateCounter() {
   if (!Number.isFinite(startTimestamp)) return;
 
@@ -590,8 +643,11 @@ function updateCounter() {
     String(totalSeconds % 60).padStart(2, "0");
 }
 
-updateCounter();
-setInterval(updateCounter, 1000);
+window.addEventListener('DOMContentLoaded', () => {
+  loadGiftData();
+  updateCounter();
+  setInterval(updateCounter, 1000);
+});
 </script>
 
 </body>
