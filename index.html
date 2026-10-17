@@ -256,13 +256,6 @@ p {
   white-space: pre-line;
 }
 
-audio {
-  display: block;
-  width: 100%;
-  max-width: 450px;
-  margin: 22px auto 10px;
-}
-
 .help {
   color: #a5aac0;
   font-size: 11px;
@@ -355,6 +348,9 @@ audio {
 
 <div class="background"></div>
 
+<!-- مشغل الصوت المخفي للتشغيل الفوري من البداية -->
+<audio id="globalAudioPlayer" preload="auto" style="display: none;"></audio>
+
 <header class="top">
   <div class="brand">نبض الذكريات ♡</div>
 </header>
@@ -383,11 +379,12 @@ audio {
         خذ نفس، وخلّي قلبك يعيش الحكاية.
       </p>
 
+      <!-- زر البداية المحدث لتشغيل الأغنية والانتقال الفوري -->
       <button
         class="primary"
         type="button"
-        onclick="showScene(1)"
-      >ابدأ الرحلة ♡</button>
+        onclick="startGiftJourney()"
+      >هديتك الخاصة ♡</button>
     </div>
   </section>
 
@@ -453,9 +450,6 @@ audio {
         <div class="song-title" id="songTitle">أغنيتنا الخاصة</div>
         <p class="song-description" id="songDescription">في أغانٍ بتصير مرتبطة بشخص...</p>
 
-        <audio id="songPlayer" controls preload="none"></audio>
-        <p class="help" id="songHelp"></p>
-
         <div class="line"></div>
 
         <div class="counter-title">من يوم بلّشت حكايتنا</div>
@@ -512,6 +506,7 @@ const db = firebase.firestore();
 const COLLECTION_NAME = 'althikrayat_gifts';
 
 let startTimestamp = Date.now();
+let loadedAudioUrl = "";
 
 /* ===================================
    التنقل بين المراحل
@@ -526,6 +521,15 @@ function showScene(index) {
   });
 
   window.scrollTo(0, 0);
+}
+
+// تشغيل الأغنية فوراً مع الضغط على زر البداية
+function startGiftJourney() {
+  const audio = document.getElementById("globalAudioPlayer");
+  if (loadedAudioUrl && loadedAudioUrl.trim() !== "") {
+    audio.play().catch(e => console.log("Audio play error:", e));
+  }
+  showScene(1);
 }
 
 /* ===================================
@@ -588,20 +592,17 @@ async function loadGiftData() {
         photoGallery.style.display = "none";
       }
 
-      // الصوت
-      const player = document.getElementById("songPlayer");
-      const songHelp = document.getElementById("songHelp");
-
+      // إعداد الصوت للتشغيل الفوري بالخلفية
       if (docData.audioUrl && docData.audioUrl.trim() !== "") {
-        player.src = docData.audioUrl.trim();
-        songHelp.textContent = "اضغط تشغيل لسماع الرسالة الصوتية / الأغنية ♡";
-      } else {
-        player.style.display = "none";
-        songHelp.textContent = "";
+        loadedAudioUrl = docData.audioUrl.trim();
+        const audio = document.getElementById("globalAudioPlayer");
+        audio.src = loadedAudioUrl;
       }
 
-      // العداد بحسب تاريخ إنشاء الهدية
-      if (docData.createdAt && docData.createdAt.toDate) {
+      // ضبط تاريخ العداد بناءً على المدخل في لوحة التحكم أو تاريخ الإنشاء
+      if (docData.startDate && docData.startDate.trim() !== "") {
+        startTimestamp = new Date(docData.startDate).getTime();
+      } else if (docData.createdAt && docData.createdAt.toDate) {
         startTimestamp = docData.createdAt.toDate().getTime();
       }
     }
