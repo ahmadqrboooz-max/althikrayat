@@ -7,13 +7,13 @@
 <title>نبض الذكريات</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#e7c477;--light:#fff0c5;--bg:#070914}
+:root{--gold:#e7c477;--light:#fff0c5;--bg:#070914;--g1:#1f2d59;--g2:#34183c}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{margin:0;min-height:100%}
 body{background:var(--bg);color:#fffaf0;font-family:Cairo,sans-serif;overflow-x:hidden}
 button{font-family:inherit;cursor:pointer;touch-action:manipulation}
-.bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0,#1f2d59,transparent 55%),radial-gradient(ellipse at 10% 95%,#34183c,transparent 50%),var(--bg)}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0,var(--g1),transparent 55%),radial-gradient(ellipse at 10% 95%,var(--g2),transparent 50%),var(--bg)}
 #fx{position:fixed;inset:0;z-index:1;pointer-events:none}
 .top{position:fixed;z-index:10;top:0;left:0;right:0;padding:16px 20px;color:var(--gold);font-size:14px;font-weight:800;pointer-events:none;background:linear-gradient(#070914dd,transparent)}
 .scene{display:none;position:relative;z-index:2;min-height:100vh;min-height:100svh;padding:90px 17px 40px;align-items:center;justify-content:center;text-align:center}
@@ -63,6 +63,28 @@ p{line-height:2.1}
 #loader{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;justify-content:center;align-items:center;color:var(--gold);font-size:18px}
 @media(max-width:400px){.card{padding:23px 14px}.counter{gap:4px}.lb{font-size:10px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+body[data-th=bd]{--gold:#ffc46b;--light:#ffeccc;--g1:#4a1d4f}
+body[data-th=wd]{--gold:#f2c6a0;--light:#ffe6dc;--g1:#4a1c3a;--g2:#2a1d4a}
+#s4{background:#000}
+.il{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);margin:0;padding:0 24px;font-family:Amiri,serif;color:var(--light);font-size:clamp(26px,6vw,40px);line-height:1.9;opacity:0;transition:opacity 1.8s ease}
+.il.on{opacity:1}
+.nm{font-size:clamp(44px,11vw,80px);color:var(--gold);text-shadow:0 0 50px var(--gold)}
+.oc{display:block;margin-top:10px;font:16px Cairo,sans-serif;color:#c0c4d7;text-shadow:none}
+.skip{position:fixed;bottom:22px;left:0;right:0;margin:auto;width:max-content;background:none;border:0;color:#9298b0;font-size:12px;z-index:5}
+.env{position:relative;width:280px;max-width:86vw;height:190px;margin:36px auto 14px;cursor:pointer;filter:drop-shadow(0 20px 40px #000a);animation:fl 3.5s ease-in-out infinite}
+.env.open{animation:none}
+@keyframes fl{50%{transform:translateY(-8px)}}
+.env>*{position:absolute}
+.bk{inset:0;border-radius:10px;background:#231a3a;border:1px solid #e7c47766}
+.ltr{left:14px;right:14px;top:12px;height:150px;z-index:1;border-radius:6px;background:linear-gradient(#fff6dc,#f0dfae);transition:transform 1.2s ease .6s}
+.fr{inset:0;z-index:2;border-radius:10px;background:linear-gradient(160deg,#33244a,#1b2749);clip-path:polygon(0 38%,50% 64%,100% 38%,100% 100%,0 100%)}
+.fl{left:0;right:0;top:0;height:64%;z-index:3;background:linear-gradient(#3b2a57,#2a1d3a);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .9s ease}
+.seal{left:50%;top:50%;width:46px;height:46px;margin:-27px 0 0 -23px;z-index:4;border-radius:50%;display:grid;place-items:center;color:#4a2a05;background:radial-gradient(#ffd98a,#b8862d);transition:opacity .4s}
+.env.open .fl{transform:rotateX(180deg);z-index:0}
+.env.open .ltr{transform:translateY(-70px)}
+.env.open .seal{opacity:0}
+.cake{margin:14px 0;cursor:pointer;font-size:44px}
 </style>
 </head>
 <body>
@@ -114,6 +136,7 @@ p{line-height:2.1}
       <div class="row"><span id="tm">0:00 / 0:00</span><button class="pb" id="pb" type="button" aria-label="تشغيل / إيقاف">▶</button></div>
     </div>
     <div class="line"></div>
+    <div class="cake" id="cake" hidden><div id="cd">🎂🕯️</div><p class="help" id="ch">اضغط واطفي الشمعة</p></div>
     <div class="ct">من يوم بلّشت حكايتنا</div>
     <p class="help">كل ثانية صارت جزء من حكايتنا</p>
     <div class="counter">
@@ -127,6 +150,12 @@ p{line-height:2.1}
   <button class="back" type="button" onclick="showScene(2)">رجوع</button>
   <div class="foot">صُنعت بحب من نبض الذكريات ♡</div>
 </div></section>
+<section class="scene" id="s4"></section>
+<section class="scene" id="s5"><div class="content">
+  <h2>وصلك شي من القلب</h2>
+  <div class="env" id="env"><div class="bk"></div><div class="ltr"></div><div class="fr"></div><div class="fl"></div><div class="seal">♡</div></div>
+  <p class="help">المس الظرف لتفتحه</p>
+</div></section>
 </main>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -139,16 +168,20 @@ let start=Date.now(),msgText='كل حرف هون انكتب إلك بحب ♡',i
 
 /* التنقل */
 function showScene(i){
-  document.querySelectorAll('.scene').forEach((s,k)=>s.classList.toggle('on',k===i));
+  document.querySelectorAll('.scene').forEach((e,k)=>e.classList.toggle('on',k===i));
   scrollTo(0,0);
-  clearInterval(typeT);clearInterval(slideT);
+  clearInterval(typeT);clearInterval(slideT);introT.forEach(clearTimeout);introT=[];
   if(i===1)typeMsg();
   if(i===2)startSlides();
+  if(i===4)intro();
+  if(i===5)$('env').classList.remove('open');
 }
-function startJourney(){
-  if(hasAudio)aud.play().catch(()=>{});
-  showScene(1);
+function fadeIn(){
+  if(!hasAudio)return;
+  aud.volume=0;aud.play().catch(()=>{});
+  let v=0;const f=setInterval(()=>{v=Math.min(1,v+.04);aud.volume=v;if(v>=1)clearInterval(f)},250);
 }
+function startJourney(){fadeIn();showScene(seen?1:4);seen=true}
 $('go').onclick=startJourney;
 
 /* كتابة الرسالة حرف حرف (اضغط على البطاقة للتخطي) */
@@ -222,7 +255,7 @@ async function loadGift(){
     if(id){const d=await db.collection(COL).doc(id).get();if(d.exists)data=d.data()}
     else{const s=await db.collection(COL).where('shortCode','==',code).limit(1).get();if(!s.empty)data=s.docs[0].data()}
     if(data){
-      const name=String(data.recipientName||data.recipient||'').trim();
+      const name=String(data.recipientName||data.recipient||'').trim();rname=name;occ=String(data.occasion||'').trim().slice(0,40);th=pickTheme(occ);
       if(name){
         $('rh').textContent='إلى '+name+' ♡';
         const w=$('wt');w.textContent='إلك يا '+name+'...';
@@ -236,6 +269,7 @@ async function loadGift(){
       audioUrl=typeof data.audioUrl==='string'?data.audioUrl.trim():'';
     }
   }catch(e){console.error('خطأ في جلب الهدية:',e)}
+  document.body.dataset.th=th;$('cake').hidden=th!=='bd';dispatchEvent(new Event('theme'));
   buildSlides();
   $('loader').style.display='none';
   prepAudio(audioUrl);
@@ -251,22 +285,61 @@ function tick(){
   $('s').textContent=p(t%60);
 }
 
-/* غبار ذهبي وقلوب */
+/* الافتتاحية السينمائية والظرف */
+let introT=[],rname='',occ='',seen=false,th='def',burst=()=>{};
+const LINES={def:['في ناس بتمرّ بحياتنا','وفي ناس بتصير حياتنا'],bd:['في أيام بتصير أحلى','لأنو إنت فيها'],wd:['في قلوب بتلاقي بعضها','وبتكمّل الطريق سوا']};
+const pickTheme=o=>/ميلاد/.test(o)?'bd':/خطوب|زواج|زفاف|عرس|كتب كتاب/.test(o)?'wd':'def';
+function intro(){
+  const s=$('s4'),L=LINES[th],ps=[];
+  s.innerHTML='<button class="skip" type="button">تخطي</button>';
+  [L[0],L[1],''].forEach((t,i)=>{
+    const p=document.createElement('p');p.className='il'+(i>1?' nm':'');
+    if(i>1){p.textContent=rname?'إلك يا '+rname:'إلك ♡';if(occ){const o=document.createElement('span');o.className='oc';o.textContent=occ;p.appendChild(o)}}
+    else p.textContent=t;
+    s.appendChild(p);ps.push(p);
+  });
+  const at=(ms,f)=>introT.push(setTimeout(f,ms));
+  at(600,()=>ps[0].classList.add('on'));
+  at(3200,()=>ps[1].classList.add('on'));
+  at(6400,()=>{ps[0].classList.remove('on');ps[1].classList.remove('on')});
+  at(8000,()=>ps[2].classList.add('on'));
+  at(12000,()=>showScene(5));
+  s.querySelector('.skip').onclick=()=>showScene(5);
+}
+$('env').onclick=function(){
+  if(this.classList.contains('open'))return;
+  this.classList.add('open');
+  if(navigator.vibrate)navigator.vibrate(40);
+  const r=this.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,28);
+  setTimeout(()=>showScene(1),2300);
+};
+let blown=false;
+$('cake').onclick=()=>{
+  if(blown)return;blown=true;
+  $('cd').textContent='💨';burst(innerWidth/2,innerHeight/2,40);
+  setTimeout(()=>{$('cd').textContent='🎂✨';$('ch').textContent='كل عام وحياتك أحلى ♡'},900);
+};
+addEventListener('pointerdown',e=>burst(e.clientX,e.clientY,5));
+
+/* جزيئات حسب المناسبة */
+const TH={def:{c:['#e7c477'],g:'♥',gp:.15,d:-1},bd:{c:['#ff8fb8','#ffd166','#7ae0ff','#b794ff'],g:'■',gp:.8,d:1},wd:{c:['#ffb3c7','#ffd9e2','#f2c6a0'],g:'✿',gp:.8,d:1}};
 (function(){
   if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-  const c=$('fx'),x=c.getContext('2d');let w,h;
+  const c=$('fx'),x=c.getContext('2d'),R=Math.random;let w,h,B=[];
   const rs=()=>{w=c.width=innerWidth;h=c.height=innerHeight};rs();addEventListener('resize',rs);
-  const mk=i=>({x:Math.random()*w,y:i?Math.random()*h:h+20,r:Math.random()*2+.6,v:Math.random()*.4+.15,s:Math.random()*6,h:Math.random()<.15});
-  const P=Array.from({length:42},()=>mk(1));
-  x.fillStyle='#e7c477';
+  const mk=i=>{const t=TH[th];return{x:R()*w,y:i?R()*h:(t.d<0?h+20:-20),r:R()*2+.8,v:t.d*(R()*.5+.2),s:R()*6,col:t.c[R()*t.c.length|0],g:R()<t.gp}};
+  let P=Array.from({length:42},()=>mk(1));
+  addEventListener('theme',()=>{P=Array.from({length:42},()=>mk(1))});
+  burst=(bx,by,n)=>{const t=TH[th];for(let i=0;i<n;i++){const a=R()*6.28,sp=R()*4+1.5;B.push({x:bx,y:by,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-2,a:1,col:t.c[R()*t.c.length|0],g:th==='def'?'♥':t.g})}};
   (function f(t){
     x.clearRect(0,0,w,h);
     P.forEach((p,i)=>{
-      p.y-=p.v;p.x+=Math.sin(t/1500+p.s)*.3;if(p.y<-20)P[i]=mk();
-      x.globalAlpha=.25+.35*Math.abs(Math.sin(t/1000+p.s));
-      if(p.h){x.font=p.r*7+'px serif';x.fillText('♥',p.x,p.y)}
-      else{x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill()}
+      p.y+=p.v;p.x+=Math.sin(t/1500+p.s)*.3;if(p.y<-30||p.y>h+30)P[i]=mk();
+      x.globalAlpha=.25+.35*Math.abs(Math.sin(t/1000+p.s));x.fillStyle=p.col;
+      if(p.g){x.font=p.r*7+'px serif';x.fillText(TH[th].g,p.x,p.y)}else{x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill()}
     });
+    B=B.filter(b=>b.a>0);
+    B.forEach(b=>{b.x+=b.vx;b.y+=b.vy;b.vy+=.08;b.a-=.014;x.globalAlpha=Math.max(b.a,0);x.fillStyle=b.col;x.font='20px serif';x.fillText(b.g,b.x,b.y)});
     requestAnimationFrame(f);
   })(0);
 })();
