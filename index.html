@@ -5,651 +5,273 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#070914">
 <title>نبض الذكريات</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --gold: #e7c477;
-  --light: #fff0c5;
-  --bg: #070914;
-}
-
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  min-height: 100%;
-}
-
-body {
-  background: var(--bg);
-  color: #fffaf0;
-  font-family: Cairo, sans-serif;
-  overflow-x: hidden;
-}
-
-button {
-  font-family: inherit;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-
-.background {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at 50% 10%, #1b2749, transparent 55%),
-    radial-gradient(ellipse at 10% 90%, #281731, transparent 50%),
-    #070914;
-}
-
-.background::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: .5;
-  background-image:
-    radial-gradient(2px 2px at 20% 30%, white 50%, transparent),
-    radial-gradient(1px 1px at 70% 20%, #e7c477 50%, transparent),
-    radial-gradient(2px 2px at 80% 65%, white 50%, transparent),
-    radial-gradient(1px 1px at 40% 75%, white 50%, transparent);
-  background-size: 230px 230px;
-}
-
-.top {
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 16px 20px;
-  background: linear-gradient(#070914dd, transparent);
-  pointer-events: none;
-}
-
-.brand {
-  color: var(--gold);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.scene {
-  display: none;
-  position: relative;
-  z-index: 1;
-  min-height: 100vh;
-  min-height: 100svh;
-  width: 100%;
-  padding: 90px 17px 40px;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.scene.active {
-  display: flex;
-  animation: appear .6s ease;
-}
-
-@keyframes appear {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.content {
-  width: 100%;
-  max-width: 680px;
-  margin: auto;
-}
-
-.eyebrow {
-  color: var(--gold);
-  font-size: 11px;
-  letter-spacing: 3px;
-  margin-bottom: 20px;
-}
-
-h1 {
-  color: var(--light);
-  font-family: Amiri, serif;
-  font-size: clamp(38px, 8vw, 65px);
-  line-height: 1.6;
-  margin: 0;
-}
-
-h2 {
-  color: var(--light);
-  font-family: Amiri, serif;
-  font-size: clamp(30px, 7vw, 44px);
-  line-height: 1.6;
-  margin: 8px 0 15px;
-}
-
-p {
-  line-height: 2.1;
-}
-
-.subtitle {
-  color: #c0c4d7;
-  font-size: 15px;
-  margin: 15px auto;
-}
-
-.heart {
-  color: var(--gold);
-  font-size: 36px;
-  margin: 15px;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  50% { transform: scale(1.12); }
-}
-
-.line {
-  width: 100px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  margin: 22px auto;
-}
-
-.primary {
-  position: relative;
-  z-index: 5;
-  display: inline-block;
-  min-width: 180px;
-  padding: 14px 25px;
-  margin-top: 25px;
-  border: 1px solid var(--gold);
-  border-radius: 40px;
-  background: linear-gradient(135deg, #fff0c5, #c49b4f);
-  color: #17101a;
-  font-size: 15px;
-  font-weight: 800;
-  box-shadow: 0 0 30px #e7c47725;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-.primary:active {
-  transform: scale(.97);
-}
-
-.card {
-  padding: 28px 20px;
-  border: 1px solid #e7c47744;
-  border-radius: 22px;
-  background: #ffffff09;
-  box-shadow: 0 15px 55px #0004;
-  backdrop-filter: blur(10px);
-}
-
-.number {
-  color: var(--gold);
-  font-size: 11px;
-  letter-spacing: 2px;
-}
-
-.message {
-  color: #fffaf0;
-  font-family: Amiri, serif;
-  font-size: clamp(22px, 5vw, 29px);
-  line-height: 2.1;
-  white-space: pre-line;
-  overflow-wrap: anywhere;
-}
-
-.signature {
-  color: var(--gold);
-  margin-top: 20px;
-}
-
-.photo-gallery {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: center;
-  margin: 20px 0;
-}
-
-.photo-frame {
-  width: 100%;
-  max-width: 390px;
-  padding: 7px;
-  border: 1px solid #e7c47788;
-  border-radius: 18px;
-  background: #ffffff08;
-}
-
-.photo-frame img {
-  display: block;
-  width: 100%;
-  max-height: 430px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
-.photo-message {
-  color: var(--light);
-  font-family: Amiri, serif;
-  font-size: 25px;
-  white-space: pre-line;
-}
-
-.song-icon {
-  font-size: 38px;
-  color: var(--gold);
-  margin: 18px;
-}
-
-.song-title {
-  color: var(--light);
-  font-size: 18px;
-}
-
-.song-description {
-  color: #c0c4d7;
-  font-size: 13px;
-  white-space: pre-line;
-}
-
-.help {
-  color: #a5aac0;
-  font-size: 11px;
-}
-
-.counter-title {
-  color: var(--light);
-  font-family: Amiri, serif;
-  font-size: 25px;
-  margin-top: 28px;
-}
-
-.counter {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 7px;
-  margin-top: 20px;
-}
-
-.unit {
-  padding: 14px 3px;
-  border: 1px solid #e7c47733;
-  border-radius: 13px;
-  background: #070914aa;
-}
-
-.value {
-  color: var(--light);
-  font-size: clamp(21px, 5vw, 32px);
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
-
-.label {
-  color: #b8bdd1;
-  font-size: 11px;
-}
-
-.back {
-  margin-top: 22px;
-  padding: 11px 23px;
-  border: 1px solid #e7c47766;
-  border-radius: 30px;
-  background: transparent;
-  color: var(--light);
-}
-
-.footer {
-  margin-top: 25px;
-  color: #9298b0;
-  font-size: 11px;
-}
-
-/* شاشة التحميل */
-#loader {
-  position: fixed;
-  inset: 0;
-  background: var(--bg);
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: var(--gold);
-  font-size: 18px;
-}
-
-@media (max-width: 400px) {
-  .card { padding: 23px 14px; }
-  .counter { gap: 4px; }
-  .unit { padding: 12px 2px; }
-  .label { font-size: 10px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation: none !important;
-    scroll-behavior: auto !important;
-  }
-}
+:root{--gold:#e7c477;--light:#fff0c5;--bg:#070914}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:#fffaf0;font-family:Cairo,sans-serif;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;touch-action:manipulation}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0,#1f2d59,transparent 55%),radial-gradient(ellipse at 10% 95%,#34183c,transparent 50%),var(--bg)}
+#fx{position:fixed;inset:0;z-index:1;pointer-events:none}
+.top{position:fixed;z-index:10;top:0;left:0;right:0;padding:16px 20px;color:var(--gold);font-size:14px;font-weight:800;pointer-events:none;background:linear-gradient(#070914dd,transparent)}
+.scene{display:none;position:relative;z-index:2;min-height:100vh;min-height:100svh;padding:90px 17px 40px;align-items:center;justify-content:center;text-align:center}
+.scene.on{display:flex;animation:in .9s ease}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.content{width:100%;max-width:680px;margin:auto}
+h1,h2{color:var(--light);font-family:Amiri,serif;line-height:1.6;margin:0}
+h1{font-size:clamp(38px,8vw,64px);text-shadow:0 0 40px #e7c47755}
+h2{font-size:clamp(28px,7vw,42px);margin:6px 0 10px}
+p{line-height:2.1}
+.sub{color:#c0c4d7;font-size:15px;margin:15px auto}
+.heart{color:var(--gold);font-size:36px;margin:15px;animation:pulse 2s infinite}
+@keyframes pulse{50%{transform:scale(1.14)}}
+.line{width:100px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:20px auto}
+.primary{display:inline-block;min-width:190px;padding:14px 26px;margin-top:22px;border:1px solid var(--gold);border-radius:40px;background:linear-gradient(135deg,#fff0c5,#c49b4f);color:#17101a;font-size:15px;font-weight:800;box-shadow:0 0 30px #e7c47730;-webkit-appearance:none;appearance:none;transition:opacity .4s}
+.primary:active{transform:scale(.97)}
+.primary[disabled]{opacity:.55;cursor:wait}
+.help{color:#a5aac0;font-size:12px;margin:12px 0 0}
+.card{padding:28px 20px;border:1px solid #e7c47744;border-radius:22px;background:#ffffff09;box-shadow:0 15px 55px #0005;backdrop-filter:blur(10px)}
+.tag{color:var(--gold);font-size:13px}
+.msg{font-family:Amiri,serif;font-size:clamp(22px,5vw,29px);line-height:2.1;white-space:pre-line;overflow-wrap:anywhere;min-height:120px;margin:0}
+#t2{visibility:hidden}
+.show{position:relative;width:100%;max-width:340px;aspect-ratio:4/5;margin:18px auto 12px;border:1px solid #e7c47788;border-radius:18px;overflow:hidden;background:#0004}
+.sl{position:absolute;inset:0;opacity:0;transition:opacity 1.6s}
+.sl.on{opacity:1}
+.sl img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1);transition:transform 10s ease-out}
+.sl.on img{transform:scale(1.14)}
+.dots{display:flex;gap:7px;justify-content:center}
+.dots b{width:7px;height:7px;border-radius:50%;background:#e7c47755;transition:background .4s}
+.dots b.on{background:var(--gold)}
+.disc{width:96px;height:96px;margin:16px auto;border-radius:50%;background:radial-gradient(circle,#070914 13%,transparent 14%),conic-gradient(#e7c477,#7a5a22,#fff0c5,#7a5a22,#e7c477);box-shadow:0 0 35px #e7c47745}
+.spin{animation:rot 6s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.st{color:var(--light);font-size:18px}
+.bar{direction:ltr;height:6px;margin:16px 4px 8px;border-radius:6px;background:#ffffff22;cursor:pointer}
+.bar i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#c49b4f,#fff0c5)}
+.row{direction:ltr;display:flex;align-items:center;justify-content:space-between;color:#b8bdd1;font-size:12px}
+.pb{width:46px;height:46px;border-radius:50%;border:1px solid var(--gold);background:#e7c47722;color:var(--light);font-size:16px}
+.ct{color:var(--light);font-family:Amiri,serif;font-size:25px;margin-top:26px}
+.counter{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:18px}
+.unit{padding:14px 3px;border:1px solid #e7c47733;border-radius:13px;background:#070914aa}
+.val{color:var(--light);font-size:clamp(21px,5vw,32px);font-weight:800;font-variant-numeric:tabular-nums}
+.lb{color:#b8bdd1;font-size:11px}
+.sig{color:var(--gold);margin-top:18px}
+.back{margin:20px 6px 0;padding:11px 23px;border:1px solid #e7c47766;border-radius:30px;background:transparent;color:var(--light)}
+.foot{margin-top:24px;color:#9298b0;font-size:11px}
+#loader{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;justify-content:center;align-items:center;color:var(--gold);font-size:18px}
+@media(max-width:400px){.card{padding:23px 14px}.counter{gap:4px}.lb{font-size:10px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
-
 <body>
-
-<div id="loader">
-  <div class="heart">♡</div>
-  <p>جاري تحميل نبض الذكريات...</p>
-</div>
-
-<div class="background"></div>
-
-<!-- مشغل الصوت المخفي للتشغيل الفوري من البداية -->
-<audio id="globalAudioPlayer" preload="auto" style="display: none;"></audio>
-
-<header class="top">
-  <div class="brand">نبض الذكريات ♡</div>
-</header>
+<div id="loader"><div class="heart">♡</div><p>جاري تحميل نبض الذكريات...</p></div>
+<div class="bg"></div>
+<canvas id="fx"></canvas>
+<audio id="aud" preload="auto" loop></audio>
+<header class="top">نبض الذكريات ♡</header>
 
 <main>
+<section class="scene on" id="s0"><div class="content">
+  <h1 id="wt">في أشياء ما بتنحكى...<br>بتنحس بالقلب</h1>
+  <div class="heart">♡</div><div class="line"></div>
+  <p class="sub">مو مجرد هدية...<br>هاي لحظات ومشاعر انجمعت إلك بمكان واحد.<br>خذ نفس، وخلّي قلبك يعيش الحكاية.</p>
+  <button class="primary" id="go" type="button" disabled>جاري تجهيز هديتك...</button>
+  <p class="help">فعّل صوت جهازك لتجربة أجمل 🔊</p>
+</div></section>
 
-  <!-- البداية -->
-  <section class="scene active" id="scene0">
-    <div class="content">
-      <div class="eyebrow">A MEMORY MADE FOR YOU</div>
+<section class="scene" id="s1"><div class="content">
+  <div class="card" id="card1">
+    <div class="tag">رسالة إلك</div>
+    <h2 id="rh">إلك بقلب صادق</h2>
+    <div class="line"></div>
+    <p class="msg"><span id="t1"></span><span id="t2"></span></p>
+  </div>
+  <button class="back" type="button" onclick="showScene(0)">رجوع</button>
+  <button class="primary" type="button" onclick="showScene(2)">كمّل الحكاية</button>
+</div></section>
 
-      <h1 id="welcomeTitle">
-        في أشياء ما بتنحكى...
-        <br>
-        بتنحس بالقلب
-      </h1>
+<section class="scene" id="s2"><div class="content">
+  <div class="card">
+    <div class="tag">ذكرى إلنا</div>
+    <h2>صورة بتحكي حكاية</h2>
+    <div class="show" id="show"></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="back" type="button" onclick="showScene(1)">رجوع</button>
+  <button class="primary" type="button" onclick="showScene(3)">للحظة الأخيرة ♡</button>
+</div></section>
 
-      <div class="heart">♡</div>
-      <div class="line"></div>
-
-      <p class="subtitle" id="welcomeSubtitle">
-        مو مجرد هدية...
-        <br>
-        هاي لحظات ومشاعر انجمعت إلك بمكان واحد.
-        <br>
-        خذ نفس، وخلّي قلبك يعيش الحكاية.
-      </p>
-
-      <!-- زر البداية المحدث لتشغيل الأغنية والانتقال الفوري -->
-      <button
-        class="primary"
-        type="button"
-        onclick="startGiftJourney()"
-      >هديتك الخاصة ♡</button>
+<section class="scene" id="s3"><div class="content">
+  <div class="card">
+    <div class="tag">لحنتنا ووقتنا</div>
+    <h2>إلنا حكاية ما بيوقف وقتها</h2>
+    <div id="player" hidden>
+      <div class="disc" id="disc"></div>
+      <div class="st">أغنيتنا الخاصة</div>
+      <div class="bar" id="bar"><i id="fill"></i></div>
+      <div class="row"><span id="tm">0:00 / 0:00</span><button class="pb" id="pb" type="button" aria-label="تشغيل / إيقاف">▶</button></div>
     </div>
-  </section>
-
-  <!-- المرحلة الأولى: الرسالة -->
-  <section class="scene" id="scene1">
-    <div class="content">
-      <div class="eyebrow">A MESSAGE FROM THE HEART</div>
-
-      <div class="card">
-        <div class="number">01 — رسالة إلك</div>
-        <h2 id="recipientHeader">إلك بقلب صادق</h2>
-        <div class="line"></div>
-
-        <p class="message" id="personalMessage">جاري التحميل...</p>
-        <p class="signature" id="signature"></p>
-      </div>
-
-      <button class="back" type="button" onclick="showScene(0)">
-        رجوع
-      </button>
-
-      <button class="primary" type="button" onclick="showScene(2)">
-        كمّل الحكاية ←
-      </button>
+    <div class="line"></div>
+    <div class="ct">من يوم بلّشت حكايتنا</div>
+    <p class="help">كل ثانية صارت جزء من حكايتنا</p>
+    <div class="counter">
+      <div class="unit"><div class="val" id="d">0</div><div class="lb">يوم</div></div>
+      <div class="unit"><div class="val" id="h">00</div><div class="lb">ساعة</div></div>
+      <div class="unit"><div class="val" id="m">00</div><div class="lb">دقيقة</div></div>
+      <div class="unit"><div class="val" id="s">00</div><div class="lb">ثانية</div></div>
     </div>
-  </section>
-
-  <!-- المرحلة الثانية: الصورة -->
-  <section class="scene" id="scene2">
-    <div class="content">
-      <div class="eyebrow">A MOMENT TO REMEMBER</div>
-
-      <div class="card">
-        <div class="number">02 — ذكرى إلنا</div>
-        <h2>صورة بتحكي حكاية</h2>
-
-        <div id="photoGallery" class="photo-gallery"></div>
-
-        <p class="photo-message" id="photoMessage"></p>
-      </div>
-
-      <button class="back" type="button" onclick="showScene(1)">
-        رجوع
-      </button>
-
-      <button class="primary" type="button" onclick="showScene(3)">
-        للحظة الأخيرة ♡
-      </button>
-    </div>
-  </section>
-
-  <!-- المرحلة الثالثة: الأغنية والعداد -->
-  <section class="scene" id="scene3">
-    <div class="content">
-      <div class="eyebrow">OUR TIME • OUR SONG</div>
-
-      <div class="card">
-        <div class="number">03 — لحنتنا ووقتنا</div>
-        <h2>إلنا حكاية ما بيوقف وقتها</h2>
-
-        <div class="song-icon">♫</div>
-
-        <div class="song-title" id="songTitle">أغنيتنا الخاصة</div>
-        <p class="song-description" id="songDescription">في أغانٍ بتصير مرتبطة بشخص...</p>
-
-        <div class="line"></div>
-
-        <div class="counter-title">من يوم بلّشت حكايتنا</div>
-        <p class="help">كل ثانية صارت جزء من حكايتنا</p>
-
-        <div class="counter">
-          <div class="unit">
-            <div class="value" id="days">0</div>
-            <div class="label">يوم</div>
-          </div>
-          <div class="unit">
-            <div class="value" id="hours">00</div>
-            <div class="label">ساعة</div>
-          </div>
-          <div class="unit">
-            <div class="value" id="minutes">00</div>
-            <div class="label">دقيقة</div>
-          </div>
-          <div class="unit">
-            <div class="value" id="seconds">00</div>
-            <div class="label">ثانية</div>
-          </div>
-        </div>
-
-        <p class="signature">وأجمل الذكريات لسه بالطريق ♡</p>
-      </div>
-
-      <button class="back" type="button" onclick="showScene(2)">
-        رجوع
-      </button>
-
-      <div class="footer">صُنعت بحب من نبض الذكريات ♡</div>
-    </div>
-  </section>
-
+    <p class="sig">وأجمل الذكريات لسه بالطريق ♡</p>
+  </div>
+  <button class="back" type="button" onclick="showScene(2)">رجوع</button>
+  <div class="foot">صُنعت بحب من نبض الذكريات ♡</div>
+</div></section>
 </main>
 
-<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
 <script>
-/* ===================================
-   إعدادات Firebase وتحديد المجموعة
-   =================================== */
-const firebaseConfig = {
-  projectId: "gift-qr-e2142"
-};
+firebase.initializeApp({projectId:"gift-qr-e2142"});
+const db=firebase.firestore(),COL='althikrayat_gifts';
+const $=id=>document.getElementById(id),aud=$('aud');
+let start=Date.now(),msgText='كل حرف هون انكتب إلك بحب ♡',images=[],hasAudio=false,typeT,slideT,cur=0;
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// القراءة من مجموعة الموقع الجديد حصراً
-const COLLECTION_NAME = 'althikrayat_gifts';
-
-let startTimestamp = Date.now();
-let loadedAudioUrl = "";
-
-/* ===================================
-   التنقل بين المراحل
-   =================================== */
-function showScene(index) {
-  const scenes = document.querySelectorAll(".scene");
-  if (index < 0 || index >= scenes.length) return;
-
-  scenes.forEach(function(scene, i) {
-    scene.classList.toggle("active", i === index);
-    scene.setAttribute("aria-hidden", i === index ? "false" : "true");
-  });
-
-  window.scrollTo(0, 0);
+/* التنقل */
+function showScene(i){
+  document.querySelectorAll('.scene').forEach((s,k)=>s.classList.toggle('on',k===i));
+  scrollTo(0,0);
+  clearInterval(typeT);clearInterval(slideT);
+  if(i===1)typeMsg();
+  if(i===2)startSlides();
 }
-
-// تشغيل الأغنية فوراً مع الضغط على زر البداية
-function startGiftJourney() {
-  const audio = document.getElementById("globalAudioPlayer");
-  if (loadedAudioUrl && loadedAudioUrl.trim() !== "") {
-    audio.play().catch(e => console.log("Audio play error:", e));
-  }
+function startJourney(){
+  if(hasAudio)aud.play().catch(()=>{});
   showScene(1);
 }
+$('go').onclick=startJourney;
 
-/* ===================================
-   جلب البيانات من Firebase
-   =================================== */
-async function loadGiftData() {
-  const loader = document.getElementById("loader");
-  const urlParams = new URLSearchParams(window.location.search);
-  const giftId = urlParams.get('id');
-  const shortCode = urlParams.get('c');
+/* كتابة الرسالة حرف حرف (اضغط على البطاقة للتخطي) */
+function typeMsg(){
+  const a=$('t1'),b=$('t2'),n=msgText.length;let i=0;
+  a.textContent='';b.textContent=msgText;
+  const d=Math.min(60,22000/Math.max(n,1));
+  typeT=setInterval(()=>{i++;a.textContent=msgText.slice(0,i);b.textContent=msgText.slice(i);if(i>=n)clearInterval(typeT)},d);
+}
+$('card1').onclick=()=>{clearInterval(typeT);$('t1').textContent=msgText;$('t2').textContent=''};
 
-  if (!giftId && !shortCode) {
-    loader.style.display = 'none';
-    return; // إبقاء البيانات الافتراضية
-  }
-
-  try {
-    let docData = null;
-
-    if (giftId) {
-      const doc = await db.collection(COLLECTION_NAME).doc(giftId).get();
-      if (doc.exists) docData = doc.data();
-    } else if (shortCode) {
-      const snap = await db.collection(COLLECTION_NAME).where('shortCode', '==', shortCode).limit(1).get();
-      if (!snap.empty) docData = snap.docs[0].data();
-    }
-
-    if (docData) {
-      // تعبئة الاسم
-      if (docData.recipientName || docData.recipient) {
-        const name = docData.recipientName || docData.recipient;
-        document.getElementById("recipientHeader").textContent = `إلى ${name} ♡`;
-        document.getElementById("welcomeTitle").innerHTML = `إلك يا ${name}...<br>في أشياء بتنحس بالقلب`;
-      }
-
-      // تعبئة الرسالة
-      if (docData.message) {
-        document.getElementById("personalMessage").textContent = docData.message;
-      }
-
-      // تعبئة الصور
-      const photoGallery = document.getElementById("photoGallery");
-      photoGallery.innerHTML = "";
-
-      let images = [];
-      if (docData.imageUrls && Array.isArray(docData.imageUrls) && docData.imageUrls.length > 0) {
-        images = docData.imageUrls;
-      } else if (docData.imageUrl) {
-        images = [docData.imageUrl];
-      }
-
-      if (images.length > 0) {
-        images.forEach((imgUrl) => {
-          const frame = document.createElement("div");
-          frame.className = "photo-frame";
-          frame.innerHTML = `<img src="${imgUrl}" alt="ذكرى خاصة">`;
-          photoGallery.appendChild(frame);
-        });
-      } else {
-        photoGallery.style.display = "none";
-      }
-
-      // إعداد الصوت للتشغيل الفوري بالخلفية
-      if (docData.audioUrl && docData.audioUrl.trim() !== "") {
-        loadedAudioUrl = docData.audioUrl.trim();
-        const audio = document.getElementById("globalAudioPlayer");
-        audio.src = loadedAudioUrl;
-      }
-
-      // ضبط تاريخ العداد بناءً على المدخل في لوحة التحكم أو تاريخ الإنشاء
-      if (docData.startDate && docData.startDate.trim() !== "") {
-        startTimestamp = new Date(docData.startDate).getTime();
-      } else if (docData.createdAt && docData.createdAt.toDate) {
-        startTimestamp = docData.createdAt.toDate().getTime();
-      }
-    }
-  } catch (err) {
-    console.error("خطأ في جلب بيانات الهدية:", err);
-  } finally {
-    loader.style.display = 'none';
-  }
+/* الصور */
+const okImg=u=>typeof u==='string'&&/^(data:image\/(png|jpe?g|webp|gif);base64,|https:\/\/)/i.test(u);
+function buildSlides(){
+  const box=$('show'),dots=$('dots');box.innerHTML='';dots.innerHTML='';
+  if(!images.length){box.hidden=true;return}
+  images.forEach((u,i)=>{
+    const f=document.createElement('div');f.className='sl';
+    const im=document.createElement('img');im.src=u;im.alt='ذكرى خاصة';f.appendChild(im);box.appendChild(f);
+    if(images.length>1)dots.appendChild(document.createElement('b'));
+  });
+  box.onclick=()=>goSlide(cur+1);
+}
+function goSlide(n){
+  const sl=document.querySelectorAll('.sl'),dt=document.querySelectorAll('.dots b');
+  if(!sl.length)return;
+  cur=(n+sl.length)%sl.length;
+  sl.forEach((e,i)=>e.classList.toggle('on',i===cur));
+  dt.forEach((e,i)=>e.classList.toggle('on',i===cur));
+}
+function startSlides(){
+  goSlide(0);
+  if(images.length>1)slideT=setInterval(()=>goSlide(cur+1),5500);
 }
 
-/* ===================================
-   عداد الوقت
-   =================================== */
-function updateCounter() {
-  if (!Number.isFinite(startTimestamp)) return;
+/* مشغّل الأغنية */
+const fmt=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
+$('pb').onclick=()=>aud.paused?aud.play().catch(()=>{}):aud.pause();
+aud.onplay=()=>{$('disc').classList.add('spin');$('pb').textContent='❚❚'};
+aud.onpause=()=>{$('disc').classList.remove('spin');$('pb').textContent='▶'};
+aud.ontimeupdate=()=>{
+  if(!aud.duration)return;
+  $('fill').style.width=aud.currentTime/aud.duration*100+'%';
+  $('tm').textContent=fmt(aud.currentTime)+' / '+fmt(aud.duration);
+};
+$('bar').onclick=e=>{
+  if(!aud.duration)return;
+  const r=$('bar').getBoundingClientRect();
+  aud.currentTime=(e.clientX-r.left)/r.width*aud.duration;
+};
 
-  const difference = Date.now() - startTimestamp;
-
-  if (difference < 0) {
-    document.getElementById("days").textContent = "0";
-    document.getElementById("hours").textContent = "00";
-    document.getElementById("minutes").textContent = "00";
-    document.getElementById("seconds").textContent = "00";
-    return;
-  }
-
-  const totalSeconds = Math.floor(difference / 1000);
-
-  document.getElementById("days").textContent =
-    Math.floor(totalSeconds / 86400).toLocaleString("en-US");
-
-  document.getElementById("hours").textContent =
-    String(Math.floor((totalSeconds % 86400) / 3600)).padStart(2, "0");
-
-  document.getElementById("minutes").textContent =
-    String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
-
-  document.getElementById("seconds").textContent =
-    String(totalSeconds % 60).padStart(2, "0");
+/* تجهيز الأغنية بالخلفية قبل فتح الزر */
+function ready(){const b=$('go');b.disabled=false;b.textContent='هديتك الخاصة ♡'}
+function prepAudio(url){
+  if(!/^https?:\/\//i.test(url)){ready();return}
+  hasAudio=true;$('player').hidden=false;
+  let done=false;const fin=()=>{if(!done){done=true;ready()}};
+  aud.addEventListener('canplay',fin,{once:true});
+  aud.addEventListener('error',fin,{once:true});
+  setTimeout(fin,7000);
+  aud.src=url;aud.load();
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  loadGiftData();
-  updateCounter();
-  setInterval(updateCounter, 1000);
-});
+/* جلب الهدية */
+async function loadGift(){
+  const q=new URLSearchParams(location.search),id=q.get('id'),code=q.get('c');
+  if(!id&&!code){$('loader').style.display='none';ready();return}
+  let audioUrl='';
+  try{
+    let data=null;
+    if(id){const d=await db.collection(COL).doc(id).get();if(d.exists)data=d.data()}
+    else{const s=await db.collection(COL).where('shortCode','==',code).limit(1).get();if(!s.empty)data=s.docs[0].data()}
+    if(data){
+      const name=String(data.recipientName||data.recipient||'').trim();
+      if(name){
+        $('rh').textContent='إلى '+name+' ♡';
+        const w=$('wt');w.textContent='إلك يا '+name+'...';
+        w.appendChild(document.createElement('br'));w.append('في أشياء بتنحس بالقلب');
+      }
+      if(data.message)msgText=String(data.message);
+      const list=Array.isArray(data.imageUrls)&&data.imageUrls.length?data.imageUrls:(data.imageUrl?[data.imageUrl]:[]);
+      images=list.filter(okImg);
+      if(typeof data.startDate==='string'&&data.startDate.trim())start=new Date(data.startDate).getTime();
+      else if(data.createdAt&&data.createdAt.toDate)start=data.createdAt.toDate().getTime();
+      audioUrl=typeof data.audioUrl==='string'?data.audioUrl.trim():'';
+    }
+  }catch(e){console.error('خطأ في جلب الهدية:',e)}
+  buildSlides();
+  $('loader').style.display='none';
+  prepAudio(audioUrl);
+}
+
+/* العدّاد */
+function tick(){
+  if(!Number.isFinite(start))return;
+  const t=Math.max(0,Math.floor((Date.now()-start)/1000)),p=n=>String(n).padStart(2,'0');
+  $('d').textContent=Math.floor(t/86400).toLocaleString('en-US');
+  $('h').textContent=p(Math.floor(t%86400/3600));
+  $('m').textContent=p(Math.floor(t%3600/60));
+  $('s').textContent=p(t%60);
+}
+
+/* غبار ذهبي وقلوب */
+(function(){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const c=$('fx'),x=c.getContext('2d');let w,h;
+  const rs=()=>{w=c.width=innerWidth;h=c.height=innerHeight};rs();addEventListener('resize',rs);
+  const mk=i=>({x:Math.random()*w,y:i?Math.random()*h:h+20,r:Math.random()*2+.6,v:Math.random()*.4+.15,s:Math.random()*6,h:Math.random()<.15});
+  const P=Array.from({length:42},()=>mk(1));
+  x.fillStyle='#e7c477';
+  (function f(t){
+    x.clearRect(0,0,w,h);
+    P.forEach((p,i)=>{
+      p.y-=p.v;p.x+=Math.sin(t/1500+p.s)*.3;if(p.y<-20)P[i]=mk();
+      x.globalAlpha=.25+.35*Math.abs(Math.sin(t/1000+p.s));
+      if(p.h){x.font=p.r*7+'px serif';x.fillText('♥',p.x,p.y)}
+      else{x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill()}
+    });
+    requestAnimationFrame(f);
+  })(0);
+})();
+
+addEventListener('DOMContentLoaded',()=>{loadGift();tick();setInterval(tick,1000)});
 </script>
-
 </body>
 </html>
